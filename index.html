@@ -320,11 +320,11 @@ const LESSON_1A = [
    nextDay.map(d=>{const a=days[(days.indexOf(d[1])+1)%7];return {p:[d[0]+", "+d[1]+", ",[a]],e:`After ${d[1]} comes ${a}. The order: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.`}})}
  ]},
  {name:"Pronunciation", review:"Pronunciation: sounds /h/, /aɪ/, /iː/", ex:[
-  {t:"Sounds", track:"1.2", ea:`ثلاثة أصوات: /h/ كما في hello، و/aɪ/ كما في five، و/iː/ كما في tea.`, audio:1, ins:"Choose the sound you hear in each word.", items:
+  {t:"Sounds", track:"1.2 & 1.3", ea:`ثلاثة أصوات: /h/ كما في hello، و/aɪ/ كما في five، و/iː/ كما في tea.`, audio:1, ins:"Choose the sound you hear in each word.", items:
    pron.map(w=>({p:[w[0]+"  →  ",{sel:w[1]}],e:`'${w[0]}' has the sound ${w[1]}, ${SOUND[w[1]]}.`}))}
  ]},
  {name:"Words & Phrases", review:"Words and phrases", bank:bank, ex:[
-  {t:"Complete the conversations", track:"1.3", ea:`اختاري العبارة التي تناسب معنى المحادثة وانتبهي للإملاء.`, audio:1, ins:"Use the phrases in the word bank.", bank:1, wide:1, items:[
+  {t:"Complete the conversations", ea:`اختاري العبارة التي تناسب معنى المحادثة وانتبهي للإملاء.`, ins:"Use the phrases in the word bank.", bank:1, wide:1, items:[
    [["A: ",["Two cappuccinos please"],". B: OK. Just a minute."],"Use this to order politely in a café."],
    [["A: Hi, I'm Helen. B: Hi, I'm Rob. ",["Nice to meet you"],"."],"We say this when we meet someone for the first time."],
    [["A: Hello, I'm Sarah. ",["What's your name"],"? B: Paul."],"We use this question to ask for someone's name."],
@@ -378,7 +378,7 @@ const LESSON_1B = [
   ]}
  ]},
  {name:`Words & Phrases`, review:`Words and phrases`, ex:[
-  {t:`Complete the conversations with a phrase from the list.`, ea:`اختاري العبارة التي تناسب معنى المحادثة وانتبهي للإملاء.`, audio:1, ins:`Use each phrase once.`, bank:[`I don't know`,`I think she's from Spain`,`It's a nice city`,`Where's Basel`], wide:1, items:[
+  {t:`Complete the conversations with a phrase from the list.`, ea:`اختاري العبارة التي تناسب معنى المحادثة وانتبهي للإملاء.`, ins:`Use each phrase once.`, bank:[`I don't know`,`I think she's from Spain`,`It's a nice city`,`Where's Basel`], wide:1, items:[
    [[`A: Where are you from? B: I'm from the United States. A: Where in the United States? B: New York. A: Wow! `,[`It's a nice city`],`.`],`We say this to give a positive opinion about a place.`],
    [[`A: Is Mercedes Peón from Mexico? B: No, `,[`I think she's from Spain`],`.`],`We use I think… when we are not 100% sure.`],
    [[`A: Is Sapporo in China? B: Sapporo? Sorry, `,[`I don't know`],`.`],`We say this when we don't have the information.`],
@@ -393,7 +393,7 @@ const LESSON_3 = [
  {name:`Pronunciation`, review:`Pronunciation: the alphabet`, ex:[
   {t:`1a. Listen and circle the letter with a different vowel sound.`, ea:`حروف tree /iː/: B C D E G P T V، وحروف egg /e/: F L M N S X، وحروف train /eɪ/: A H J K.`, ins:`Choose the letter whose vowel sound is different.`, audio:1, track:`1.5`, items:[{x:1,p:[`D E I V → I (example)`]}].concat([[`E L N X`,`E`,`L, N, X have the /e/ sound (egg). E has /iː/ (tree).`],[`A G J K`,`G`,`A, J, K have /eɪ/ (train). G has /iː/ (tree).`],[`B H P D`,`H`,`B, P, D have /iː/ (tree). H has /eɪ/ (train).`],[`C F L S`,`C`,`F, L, S have /e/ (egg). C has /iː/ (tree).`],[`A H J Y`,`Y`,`A, H, J have /eɪ/ (train). Y has /aɪ/.`],[`O Q U W`,`O`,`Q, U, W have /uː/ (shoe). O has /əʊ/.`],[`F T M S`,`T`,`F, M, S have /e/ (egg). T has /iː/ (tree).`]].map(r=>({p:[r[0]+` → `,{sel:r[1],o:r[0].split(` `)}],e:r[2]})))},
   {t:`1c. Say the letters.`, ins:`Say the letters of each abbreviation out loud.`, audio:1, track:`1.6`, items:[`NBA`,`ID`,`BMW`,`EU`,`SOS`].map(a=>({x:1,p:[a+` → `+a.split(``).join(` - `)]}))},
-  {t:`1e. Listen and write the words in the chart.`, ea:`ضعي الكلمة تحت الصوت الصحيح: tree /iː/ ، egg /e/ ، train /eɪ/.`, ins:`Choose the correct vowel sound for each word.`, audio:1, track:`1.7`, items:[{x:1,p:[`hello → egg /e/ (example)`]}].concat([[`help`,1],[`name`,2],[`please`,0],[`she`,0],[`spell`,1],[`Spain`,2],[`table`,2],[`teacher`,0]].map(w=>({p:[w[0]+` → `,{sel:SND3[w[1]],o:SND3}],e:`'${w[0]}' has the vowel sound ${SND3[w[1]]}.`})))}
+  {t:`1e. Listen and write the words in the chart.`, ea:`ضعي الكلمة تحت الصوت الصحيح: tree /iː/ ، egg /e/ ، train /eɪ/.`, ins:`Choose the correct vowel sound for each word. Then listen and check (1.8) and repeat the words.`, audio:1, track:`1.7 & 1.8`, items:[{x:1,p:[`hello → egg /e/ (example)`]}].concat([[`help`,1],[`name`,2],[`please`,0],[`she`,0],[`spell`,1],[`Spain`,2],[`table`,2],[`teacher`,0]].map(w=>({p:[w[0]+` → `,{sel:SND3[w[1]],o:SND3}],e:`'${w[0]}' has the vowel sound ${SND3[w[1]]}.`})))}
  ]},
  {name:`Vocabulary`, review:`Vocabulary: the classroom`, ex:[
   {t:`2a. Write the words.`, ea:`اكتبي اسم الغرض كما في الصورة، وقبل الاسم المفرد نستخدم a أو an.`, ins:`Look at the picture and write the word.`, wide:1, items:[{x:1,p:[{emo:BOARD},`\nthe board (example)`]}].concat([[`💻`,`a laptop|laptop`,`a l`],[`🖊️`,`a pen|pen`,`a p`],[TABLE,`a table|table`,`a t`],[`🚪`,`the door|door|a door`,`the d`],[`🪑`,`a chair|chair`,`a ch`],[`🪟`,`a window|window`,`a w`],[`📖`,`a dictionary|dictionary`,`a d`],[`🎒`,`a bag|bag`,`a b`],[`🧥`,`a coat|coat|a jacket|jacket`,`a c`],[`📄`,`a piece of paper|piece of paper`,`a p… of p`]].map(c=>({p:[{emo:c[0]},`\n(${c[2]}…) → `,[c[1]]],e:`The word is ${c[1].split(`|`)[0]}. Use a/the + noun.`})))},
