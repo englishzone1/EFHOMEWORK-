@@ -832,6 +832,7 @@ function gradeTest(){
   all.filter(r=>r.isFree).forEach(r=>{ const f=[...r.querySelectorAll(`input,select,textarea`)]; const ok=evalRow(r,r.itRef,f); const fb=r.fbEl; fb.classList.remove(`hidden`); fb.dir=`rtl`; fb.className=ok?`fb ok`:`fb try`; fb.textContent=ok?`📝 إجابتك مكتوبة بشكل سليم، وتصحّحها المعلمة.`:`📝 هذا السؤال تصحّحه المعلمة. ${VAL[r.itRef.v]?VAL[r.itRef.v].m:`اكتبي جملة كاملة بالإنجليزية.`}`; });
   document.querySelectorAll(`#tsecs input,#tsecs select,#tsecs textarea`).forEach(x=>x.disabled=true);
   const ok=rows.filter(r=>r.isOk).length, n=rows.length, pct=n?Math.round(ok/n*100):0;
+  ezResult(`test`,TCUR.id||TCUR.title,TCUR.title,ok,n);
   const msg=pct>=90?`عمل ممتاز! 🏆`:pct>=70?`عمل جيد! ⭐`:pct>=50?`مقبول – واصلي التدريب. 👍`:`تحتاجين مزيدًا من التدريب – راجعي الدروس. 💪`;
   const secs=[]; rows.forEach(r=>{ let g=secs.find(x=>x.s===r.secRef); if(!g){ g={s:r.secRef,n:0,ok:0}; secs.push(g); } g.n++; if(r.isOk) g.ok++; });
   let h=`<div class="scorebox" dir="rtl"><div>درجتك في الأجزاء التي تُصحَّح تلقائيًا</div><div class="big">${ok} / ${n}</div><div>${pct}% – ${msg}</div></div>`;
@@ -884,6 +885,7 @@ function gradeExam(){
   secs.push([s.name,sc,s.q.length]);tot+=sc;max+=s.q.length;
  });
  const pct=Math.round(tot/max*100);
+ ezResult(`exam`,CUR.id||CUR.title,CUR.title,tot,max);
  const msg=pct>=90?`عمل ممتاز!`:pct>=70?`عمل جيد!`:pct>=50?`مقبول – واصلي التدريب.`:`تحتاجين مزيدًا من التدريب – راجعي الدروس.`;
  const strong=[],weak=[];
  Object.keys(tags).forEach(k=>{const p=tags[k].r/tags[k].n;if(p>=0.8)strong.push(k);else if(p<0.7)weak.push(k);});
@@ -1179,7 +1181,7 @@ function updLesson(){
     dn.classList.remove(`hidden`);
     const pct=Math.round(ok/n*100), star=pct>=90?`🏆`:pct>=70?`⭐`:`👍`;
     dn.innerHTML=`<div class="dn" dir="rtl"><div class="dnb">${star}</div><b>أحسنتِ يا ${student&&student.name?student.name:``}! أنهيتِ هذا الدرس.</b><div>درجتك: ${ok} / ${n} (${pct}%)</div>${pct<70?`<div>راجعي الأسئلة الخاطئة ثم أعيدي الدرس.</div>`:``}</div>`+lessonReport(rows);
-    if(!REPSHOWN){ REPSHOWN=true; setTimeout(()=>dn.scrollIntoView({behavior:`smooth`,block:`start`}),300); }
+    if(!REPSHOWN){ REPSHOWN=true; setTimeout(()=>dn.scrollIntoView({behavior:`smooth`,block:`start`}),300); setTimeout(()=>ezResult(`lesson`,CURCARD,$(`ltitle`).textContent,ok,n),50); }
     try{ const D=getDone(); if(!D[CURCARD]||D[CURCARD].s<ok){ D[CURCARD]={s:ok,t:n}; localStorage.setItem(doneKey(),JSON.stringify(D)); } }catch(e){}
   } else dn.classList.add(`hidden`);
 }
@@ -1241,6 +1243,27 @@ function freeOK(raw,key){
 function lockRow(row){ row.locked=1; setTimeout(updLesson,0); row.querySelectorAll("input,select").forEach(f=>f.disabled=true); const b=row.querySelector(".chk"); if(b){ b.disabled=true; b.textContent=`🔒`; } }
 
 let student = {};
+/* ---------- ربط المنصة (English Zone Academy) ----------
+   عند فتح الموقع داخل لوحة الطالب في المنصة: يُرسل نتائج الدروس والاختبارات
+   وتقدّم الطالبة إلى المنصة لتُحفظ باسمها، ويستلم اسمها وتقدّمها المحفوظ. */
+const EZ_EMBED = window.parent !== window;
+function ezPost(msg){ if(!EZ_EMBED) return; try{ window.parent.postMessage(Object.assign({source:`ez-homework`},msg),`*`); }catch(e){} }
+function ezProgress(){ const d={}; try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.indexOf(`ez_`)===0) d[k]=localStorage.getItem(k); } }catch(e){} ezPost({type:`progress`,data:d}); }
+function ezResult(kind,id,title,score,total){ ezPost({type:`result`,kind:kind,id:String(id||title||``).slice(0,80),title:String(title||``).slice(0,150),score:score,total:total}); ezProgress(); }
+window.addEventListener(`message`,ev=>{
+  if(ev.source!==window.parent) return;
+  const m=ev.data||{}; if(m.source!==`ez-platform`) return;
+  if(m.type===`restore`&&m.data&&typeof m.data===`object`){
+    try{ Object.keys(m.data).forEach(k=>{ if(k.indexOf(`ez_`)!==0) return; const cur=localStorage.getItem(k); if(!cur||cur.length<String(m.data[k]).length) localStorage.setItem(k,String(m.data[k])); }); }catch(e){}
+    try{ markCards(); }catch(e){}
+  }
+  if(m.type===`student`&&m.name){
+    student={name:String(m.name).slice(0,60)};
+    $(`hello`).textContent=`Welcome, ${student.name} 🌟`;
+    $(`login`).classList.add(`hidden`); $(`hdr`).classList.remove(`hidden`); $(`app`).classList.remove(`hidden`);
+    show(`dash`);
+  }
+});
 
 function build(root,secs,exam){
   root = root||$("sections"); secs = secs||SECTIONS; root.innerHTML = "";
@@ -1368,6 +1391,7 @@ $("loginForm").addEventListener("submit",ev=>{
   $("login").classList.add("hidden"); $("hdr").classList.remove("hidden"); $("app").classList.remove("hidden");
   show("dash");
 });
+ezPost({type:`ready`});
 $("logout").onclick = ()=>{
   $("app").classList.add("hidden"); $("hdr").classList.add("hidden"); $("login").classList.remove("hidden");
   $("loginForm").reset(); build(); student = {};
