@@ -173,6 +173,8 @@ details[open]>summary{border-radius:12px 12px 0 0}
 .arh{font-size:1rem;color:#5b6a7c;font-weight:600}
 .tcover{background:#fff;border:2px solid #37474f;border-radius:14px;padding:14px 16px;margin:0 0 14px;line-height:1.9;text-align:right}
 .audl{font-weight:700;margin-bottom:4px}
+.narrow .q input{width:5.5em;min-width:0}
+.hw{font-family:var(--hand),cursive;color:#1f4fa0;font-size:1.2rem;border-bottom:2px dotted #8a9bb0;padding:0 4px}
 .audlink{display:block;font-size:.85rem;margin-top:4px;color:#8a5200;text-align:right}
 #tres{margin-bottom:18px}
 .exrep{margin-top:12px;background:#f3f8ff;border:1px solid #c9d8ea;border-right:5px solid var(--uc);border-radius:12px;padding:12px 14px;line-height:1.9;text-align:right}
@@ -988,7 +990,7 @@ const LESSON_PE3 = [
   ]}
  ]},
  {name:`Useful Phrases`, review:`Useful phrases`, ex:[
-  {t:`5. Complete the missing words and phrases in the conversation.`, ea:`عبارات مفيدة: Don't worry / What a great… / Come on / Let's go.`, ins:`Type the missing words.`, wide:1, items:[{p:[`A: Hi, Adam. I'm (1) really sorry I'm late. What time's the film?\nB: (2) `,[`Don't worry`],`. It's OK – it's at half past seven. It's only ten past seven.\n***\nA: (3) `,[`What a great`],` film!\nB: Yes – fantastic! Do you want to go to the pub now?\nA: But it's half past ten. It's (4) `,[`late`],` and I'm (5) `,[`tired`],`.\nB: (6) `,[`Come on`],`. I know a really good pub near here.\nA: Oh, OK. (7) `,[`Let's go`],`.`],e:`Useful phrases: I'm really sorry (apology), Don't worry (it's OK), What a great film! (opinion), Come on (let's do it), Let's go (suggestion).`}]}
+  {t:`5. Complete the missing words and phrases in the conversation.`, ea:`عبارات مفيدة: Don't worry (لا تقلق)، What a great film! (يا له من فيلم رائع)، It's late (الوقت متأخر)، I'm tired (أنا متعب)، Come on (هيا)، Let's go (لنذهب).`, ins:`The first letter of each word is given. Write the rest of the word. Example: (1) I'm really sorry I'm late.`, items:[{nn:1,narrow:1,p:[`A: Hi, Adam. I'm ¹r`,{html:`<span class='hw'>eally</span>`,inl:1},` s`,{html:`<span class='hw'>orry</span>`,inl:1},` I'm late. What time's the film?\nB: ²D`,[`Don't|on't`],` w`,[`worry|orry`],`. It's OK – it's at half past seven. It's only ten past seven.\n***\nA: ³W`,[`What|hat`],` a gr`,[`great|eat`],` film!\nB: Yes – fantastic! Do you want to go to the pub now?\nA: But it's half past ten. It's ⁴l`,[`late|ate`],` and I'm ⁵t`,[`tired|ired`],`.\nB: ⁶C`,[`Come|ome`],` o`,[`on|n`],`. I know a really good pub near here.\nA: Oh, OK. ⁷L`,[`Let's|et's`],` g`,[`go|o`],`.`],e:`Useful phrases: I'm really sorry, Don't worry, What a great film!, It's late, I'm tired, Come on, Let's go.`}]}
  ]}
 ];
 const G6 = `Present simple (he/she/it): positive = verb + s (She likes cats). Negative = doesn't + verb without s (She doesn't like cats).`;
@@ -1257,13 +1259,13 @@ function build(root,secs,exam){
       if(false&&ex.audio&&AUDIO[ex.audio]) e.innerHTML += /^[\w-]{20,}$/.test(AUDIO[ex.audio]) ? `<audio controls preload="none" src="https://drive.google.com/uc?export=download&id=${AUDIO[ex.audio]}" style="width:100%"></audio><p style="margin:0 0 8px;font-size:.85rem"><a href="https://drive.google.com/file/d/${AUDIO[ex.audio]}/view" target="_blank" rel="noopener">Can't hear it? Open the audio in a new tab</a></p>` : `<audio controls preload="none" src="${AUDIO[ex.audio]}" style="width:100%;margin-bottom:8px"></audio>`;
       if(ex.bank) e.innerHTML += `<div class="bank">${(Array.isArray(ex.bank)?ex.bank:bank).map(b=>`<span>${b}</span>`).join("")}</div>`;
       ex.items.forEach((it,i)=>{
-        const row = document.createElement("div"); row.className = "item"; row.secRef=s; row.exRef=ex; row.itRef=it; row.idx=i+1;
+        const row = document.createElement("div"); row.className = "item"; row.secRef=s; row.exRef=ex; row.itRef=it; row.idx=i+1; if(it.narrow) row.classList.add("narrow");
         const q = document.createElement("div"); q.className = "q";
         if(!it.nn) q.insertAdjacentHTML("beforeend",`<span class="n">${i+1}.</span>`);
         it.p.forEach(part=>{
           if(typeof part==="string"){ part.split(/ (?=[AB]: )|\n/).forEach((seg,k)=>{ if(k&&!afterBlock(q)) q.appendChild(document.createElement("br")); q.appendChild(document.createTextNode(seg)); }); }
           else if(part.ta){ const ta=document.createElement("textarea"); ta.dataset.a=""; ta.rows=6; ta.className="tarea"; q.appendChild(ta); }
-          else if(part.html){ const hd=document.createElement("div"); hd.innerHTML=part.html; q.appendChild(hd); } else if(part.ov){ const o=OV[part.ov]; const ow=document.createElement("div"); ow.className="ovw"; const wr=document.createElement("div"); wr.className="ovl"; const im=document.createElement("img"); im.src=IMG[o.img]; im.alt=""; wr.appendChild(im); o.boxes.forEach(b=>{ const inp=document.createElement("input"); inp.type="text"; inp.autocomplete="off"; inp.autocapitalize="off"; inp.spellcheck=false; inp.className="ovi"; inp.dataset.a=b[4]; inp.style.cssText="left:"+b[0]+"%;top:"+b[1]+"%;width:"+b[2]+"%;height:"+b[3]+"%"; wr.appendChild(inp); }); ow.appendChild(wr); q.appendChild(ow); } else if(part.emo){ const sp=document.createElement("div"); sp.className="emo"; sp.innerHTML=part.emo; q.appendChild(sp); } else if(part.img){ const im=document.createElement("img"); im.src=IMG[part.img]; im.className="pic"+(part.sm==1?" sm":part.sm==2?" md":""); im.alt=""; q.appendChild(im); } else if(Array.isArray(part)){
+          else if(part.html){ const hd=document.createElement(part.inl?"span":"div"); hd.innerHTML=part.html; q.appendChild(hd); } else if(part.ov){ const o=OV[part.ov]; const ow=document.createElement("div"); ow.className="ovw"; const wr=document.createElement("div"); wr.className="ovl"; const im=document.createElement("img"); im.src=IMG[o.img]; im.alt=""; wr.appendChild(im); o.boxes.forEach(b=>{ const inp=document.createElement("input"); inp.type="text"; inp.autocomplete="off"; inp.autocapitalize="off"; inp.spellcheck=false; inp.className="ovi"; inp.dataset.a=b[4]; inp.style.cssText="left:"+b[0]+"%;top:"+b[1]+"%;width:"+b[2]+"%;height:"+b[3]+"%"; wr.appendChild(inp); }); ow.appendChild(wr); q.appendChild(ow); } else if(part.emo){ const sp=document.createElement("div"); sp.className="emo"; sp.innerHTML=part.emo; q.appendChild(sp); } else if(part.img){ const im=document.createElement("img"); im.src=IMG[part.img]; im.className="pic"+(part.sm==1?" sm":part.sm==2?" md":""); im.alt=""; q.appendChild(im); } else if(Array.isArray(part)){
             const inp = document.createElement("input"); inp.type="text"; inp.autocomplete="off"; inp.autocapitalize="off"; inp.spellcheck=false;
             inp.dataset.a = part[0]; if(ex.wide) inp.className="w"; q.appendChild(inp);
           } else {
