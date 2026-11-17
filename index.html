@@ -272,11 +272,11 @@ const LESSON_1A = [
   {t:"c. Complete the conversations.", ea:`السؤال يبدأ بـ Are you…؟ والجواب القصير: Yes, I am. / No, I'm not.`, ins:"Type the missing words.", items:[
    {p:["A: ",["Are you"]," Andy? B: No, ",["I'm|I am"]," Tony."]},
    {p:["A: Excuse me. ",["Are you"]," in number 8? B: Yes, ",["I am"],". I'm Anna Jones."]},
-   {p:["A: Hello, ",["are you"]," Amy? B: Hi, ",["I'm|I am"]," Steve. Nice to meet you."]},
+   {p:["A: Hello, ",["I'm|I am"]," Amy. B: Hi, ",["I'm|I am"]," Steve. Nice to meet you."]},
    {p:["A: Hi, ",["I'm|I am"]," Mia. Are you Henry? B: No, ",["I'm not|I am not"],". I'm Max."]},
    {p:["A: Hello. ",["Are you"]," Lisa Gomez? B: Yes, ",["I am"],". Nice to meet you."]},
    {p:["A: Hi. ",["I'm|I am"]," Ben. B: Hi. ",["I'm|I am"]," Rob."]},
-   {p:["A: Excuse me. ",["Are you"]," in room 7? B: No, ",["I'm not|I am not"],". You're in room 8."]},
+   {p:["A: Excuse me. ",["Am I"]," in room 7? B: No, ",["you aren't|you're not|you are not"],". You're in room 8."]},
    {p:["A: Excuse me. ",["Are you"]," my teacher? B: Yes, ",["I am"],". I'm Peter Wilson."]}
   ].map(x=>(x.e="Questions with you start with 'Are you…?'. Short answers: Yes, I am. / No, I'm not. When we introduce ourselves we say I'm… (not 'I am' in short form 'Yes, I'm').",x))}
  ]},
@@ -488,12 +488,12 @@ const LESSON_3B = [
   {t:`2a. Re-order the words to make sentences or questions.`, ea:`this/these للقريب وthat/those للبعيد، وفي السؤال يأتي الفعل قبل الفاعل.`, ins:`Write the sentence or question.`, wide:1, items:[{x:1,p:[`these bags are → These are bags. (example)`]}].concat([[`is what that`,`What is that|What's that`],[`book isn't this your`,`This isn't your book|This is not your book`],[`plates my those are`,`Those are my plates`],[`your are keys those`,`Are those your keys`],[`my aren't photos these`,`These aren't my photos|These are not my photos`],[`that friend is your`,`Is that your friend`],[`from where this is`,`Where is this from|Where's this from`]].map(r=>({p:[r[0]+` → `,[r[1]]],e:`this / that + is; these / those + are. this / these = near you; that / those = far from you. In a question the verb comes first.`})))},
   {t:`2b. Complete the sentences with this, that, these, or those.`, ea:`this/these قريب منك، وthat/those بعيد؛ this/that للمفرد وthese/those للجمع.`, ins:`Look at the picture. Near you: this / these. Far from you: that / those.`, items:[
    {x:1,p:[{img:`ag`},`\nThat's a lovely picture! (example)`]},
-   {p:[{img:`s2`},`\nA: Is `,[`this|that`],` a Manchester United shirt? B: No, it's Manchester City.`]},
-   {p:[{img:`s3`},`\n`,[`Those|These`],` are £10.`]},
+   {p:[{img:`s2`},`\nA: Is `,[`this`],` a Manchester United shirt? B: No, it's Manchester City.`]},
+   {p:[{img:`s3`},`\n`,[`Those`],` are £10.`]},
    {p:[{img:`ky`},`\nA: Are `,[`these`],` your keys? B: Yes, they are. Thank you!`]},
    {p:[{img:`gt`},`\nLook! `,[`That`],`'s Martin from our English class.`]},
    {p:[{img:`mr`},`\nWow. `,[`These`],` are good glasses!`]},
-   {p:[{img:`hs`},`\nA: I like `,[`this|that`],` cap. B: Yes, it's very nice.`]},
+   {p:[{img:`hs`},`\nA: I like `,[`that`],` cap. B: Yes, it's very nice.`]},
    {p:[{img:`ty`},`\nA: Are `,[`these`],` teddies £5? B: No, they're £10.`]}
   ].map((x,i)=>(x.x||(x.e=`this / these = near you; that / those = far from you. this / that + singular; these / those + plural.`),x))},
   {t:`2c. Complete the conversations with typical souvenirs from your country and the price.`, ins:`Write your own answers.`, wide:1, items:[{x:1,p:[`A: Excuse me. What are those? B: They're key rings. A: How much are they? B: They're €3.50. (example)`]},
@@ -515,7 +515,7 @@ const LESSON_3B = [
    {x:1,p:[`A: How much are these key rings? B: They're €2.50. (example)`]},
    {p:[`A: `,[`Is`],` this `,[`your`],` phone? B: Oh yes, it is. Thank you very much. A: `,[`You're welcome`],`.`],e:`Is this your phone? We answer Thank you with You're welcome.`},
    {p:[`A: Is that your bag `,[`there`],`? B: No, my bag's `,[`here`],`.`],e:`there = far from you; here = near you.`},
-   {p:[`A: `,[`How much is this`],` mug? B: It's £5.00.`],e:`How much is…? asks about the price of one thing.`}
+   {p:[`A: `,[`How much is this|How much is that`],` mug? B: It's £5.00.`],e:`How much is…? asks about the price of one thing.`}
   ]}
  ]}
 ];
@@ -594,12 +594,12 @@ const LESSON_4A = [
 const LESSON_4B = [
  {name:`Vocabulary`, review:`Vocabulary: colours and common adjectives`, ex:[
   {t:`1a. Complete the colours with the missing vowels.`, ea:`الألوان: red, blue, green, yellow, black, white, brown, orange. والناقص حروف العلة.`, ins:`Write the colour.`, wide:1, items:[{x:1,p:[`My car is bl_ _e → blue (example)`]}].concat([[`Her umbrella is bl__ck.`,`black`],[`His bag is br__wn.`,`brown`],[`Gabriel's T-shirt is r__d.`,`red`],[`The board is wh__t__.`,`white`],[`Their house is gr____n.`,`green`],[`Amelia's coat is y__ll__w.`,`yellow`],[`His cap is __r__ng__.`,`orange`]].map(r=>({p:[r[0]+` → `,[r[1]]],e:`The colour is ${r[1]}. Colours: red, blue, green, yellow, black, white, brown, orange.`})))},
-  {t:`1b. Complete the sentences with the opposite of the bold word.`, ea:`عكس الصفة: big ↔ small، fast ↔ slow، cheap ↔ expensive، new ↔ old، long ↔ short.`, ins:`Write the opposite adjective.`, wide:1, items:[{x:1,p:[`Our house isn't small. It's big. (example)`]}].concat([[`My car isn't FAST.`,`slow`],[`Yulia's phone isn't CHEAP.`,`expensive`],[`His laptop isn't NEW.`,`old`],[`Tim's name isn't LONG.`,`short`],[`Their teacher isn't BAD.`,`good`],[`My car isn't CLEAN.`,`dirty`],[`My cat isn't UGLY.`,`beautiful|pretty|nice`],[`This exercise isn't EASY.`,`difficult|hard`]].map(r=>({p:[r[0]+` It's `,[r[1]],`.`],e:`The opposite is ${r[1].split(`|`)[0]}. big ↔ small, fast ↔ slow, cheap ↔ expensive, new ↔ old, long ↔ short, good ↔ bad, clean ↔ dirty, beautiful ↔ ugly, easy ↔ difficult.`})))},
+  {t:`1b. Complete the sentences with the opposite of the bold word.`, ea:`عكس الصفة: big ↔ small، fast ↔ slow، cheap ↔ expensive، new ↔ old، long ↔ short.`, ins:`Write the opposite adjective.`, wide:1, items:[{x:1,p:[`Our house isn't small. It's big. (example)`]}].concat([[`My car isn't FAST.`,`slow`],[`Yulia's phone isn't CHEAP.`,`expensive`],[`His laptop isn't NEW.`,`old`],[`Tim's name isn't LONG.`,`short`],[`Their teacher isn't BAD.`,`good`],[`My car isn't CLEAN.`,`dirty`],[`My cat isn't UGLY.`,`beautiful`],[`This exercise isn't EASY.`,`difficult`]].map(r=>({p:[r[0]+` It's `,[r[1]],`.`],e:`The opposite is ${r[1].split(`|`)[0]}. big ↔ small, fast ↔ slow, cheap ↔ expensive, new ↔ old, long ↔ short, good ↔ bad, clean ↔ dirty, beautiful ↔ ugly, easy ↔ difficult.`})))},
   {t:`1c. Complete the words.`, ea:`اختاري الصفة التي تصف الصورة.`, ins:`Look at the picture and complete the sentence.`, wide:1, items:[
    {x:1,p:[{img:`th`},`\nThat house is very old! (example)`]},
    {p:[{img:`bs`},`\nIs this bag (e…) `,[`expensive`],`?`],e:`expensive = it costs a lot of money.`},
    {p:[{img:`bk`},`\nThis book is very (l…) `,[`long`],`.`],e:`long = the book has many pages.`},
-   {p:[{img:`ex`},`\nThe English test is (d…) `,[`difficult|hard`],`.`],e:`difficult = not easy.`},
+   {p:[{img:`ex`},`\nThe English test is (d…) `,[`difficult`],`.`],e:`difficult = not easy.`},
    {p:[{img:`cr`},`\nOliver's car is very (c…) `,[`clean`],`.`],e:`clean = not dirty.`},
    {p:[{img:`ph`},`\nThose phones are very (ch…) `,[`cheap`],`.`],e:`cheap = it costs very little money.`}
   ]}
@@ -608,7 +608,7 @@ const LESSON_4B = [
   {t:`2a. Re-order the words to make sentences.`, ea:`الصفة تأتي قبل الاسم: a blue car، ولا تتغير في الجمع.`, ins:`Write the sentence.`, wide:1, items:[{x:1,p:[`I a car have blue → I have a blue car. (example)`]}].concat([[`a it's expensive camera very`,`It's a very expensive camera`],[`good they're children very`,`They're very good children`],[`a cheap that's phone`,`That's a cheap phone`],[`has a my house red door`,`My house has a red door`],[`a day it's beautiful`,`It's a beautiful day`],[`a new tablet I have`,`I have a new tablet`],[`watch this nice is a`,`This is a nice watch`]].map(r=>({p:[r[0]+` → `,[r[1]]],e:`The adjective comes before the noun (a blue car). We don't change the adjective for plural nouns (very good children).`})))},
   {t:`2b. Rewrite the sentences.`, ea:`نحوّل الجملة إلى: It's a + صفة + اسم، أو They're + صفة + اسم جمع.`, ins:`Use an adjective before the noun.`, wide:1, items:[{x:1,p:[`The car is very slow. It's a very slow car. (example)`]},
    {p:[`These exercises are very easy.\nThey're `,[`very easy exercises`],`.`]},
-   {p:[`This film is very long.\nIt's a `,[`very long film|long film`],`.`]},
+   {p:[`This film is very long.\nIt's a `,[`very long film`],`.`]},
    {p:[`The windows are green.\nThey're `,[`green windows`],`.`]},
    {p:[`Those umbrellas are very big.\nThey're `,[`very big umbrellas`],`.`]},
    {p:[`That phone is old.\nIt's an `,[`old phone`],`.`]},
@@ -814,7 +814,7 @@ const LESSON_5A = [
    {x:1,p:[`2  s_a_l_a_d → salad (example)`]},
    {p:[`3  t__a → `,[`tea`]]},
    {p:[{img:`dn2`},`\n4  p____a → `,[`pasta`]]},
-   {p:[`5  v____________s → `,[`vegetables|veg`]]},
+   {p:[`5  v____________s → `,[`vegetables`]]},
    {p:[`6  m___k → `,[`milk`]]},
    {p:[{img:`dn3`},`\n7  m___t → `,[`meat`]]},
    {p:[`8  p_________s → `,[`potatoes`]]},
@@ -831,7 +831,7 @@ const LESSON_5A = [
  {name:`Grammar`, review:`Grammar: present simple + and − (I, you, we, they)`, ex:[
   {t:`3a. Complete the sentences with the + or − of the verb in brackets.`, ea:`مع I/you/we/they: الإثبات الفعل كما هو (I like)، والنفي don't + الفعل (I don't like).`, ins:`Write the correct form of the verb.`, pics:[`kdm`], wide:1, items:[{x:1,p:[`My friends don't eat healthy food. (− eat) (example)`]}].concat([[`I `,`don't have|do not have`,` breakfast at home. (− have)`],[`You `,`drink`,` a lot of water. (+ drink)`],[`I `,`like`,` fish. (+ like)`],[`I `,`don't drink|do not drink`,` coffee in the afternoon. (− drink)`],[`We `,`have`,` a salad for lunch. (+ have)`],[`I don't drink tea because I `,`don't like|do not like`,` it. (− like)`],[`My children `,`eat`,` a lot of fruit. (+ eat)`]].map(r=>({p:[r[0],[r[1]],r[2]],e:`Present simple with I / you / we / they: positive = the verb (I like). Negative = don't + verb (I don't like).`})))},
   {t:`3b. Complete the texts with the correct form of the verbs.`, ea:`مع I/we: الإثبات الفعل كما هو (we eat)، والنفي don't + الفعل (I don't drink).`, ins:`Text 1: drink, have, not have, not like. Text 2: eat, not drink, not have.`, items:[
-   {p:[{img:`aml`},`\nI'm Amélie, and I'm from France. During the week, I (1) have breakfast in a café. I (2) `,[`don't have|do not have`],` a big breakfast, just a croissant. And I (3) `,[`drink`],` hot chocolate. I (4) `,[`don't like|do not like`],` tea or coffee.`],e:`Present simple: positive = the verb (I drink). Negative = don't + verb (I don't like, I don't have).`},
+   {p:[{img:`aml`},`\nI'm Amélie, and I'm from France. During the week, I (1) have breakfast in a café. I (2) `,[`don't have|do not have`],` a big breakfast, just a croissant. And I (3) `,[`drink`],` hot chocolate. I (4) `,[`don't like|do not like`],` tea or coffee.`],combos:[[`don't have|do not have`,`drink`,`don't like|do not like|don't have|do not have`],[`don't have|do not have`,`don't like|do not like|don't have|do not have`,`drink`]],e:`Present simple: positive = the verb (I drink). Negative = don't + verb (I don't like, I don't have).`},
    {p:[{img:`lsz`},`\nMy name is Laszlo and I'm from Hungary. I (5) `,[`don't have|do not have`],` breakfast with my family during the week, but at weekends we sit down together. We (6) `,[`eat`],` a very big breakfast: eggs, cheese, meat, and bread. I (7) `,[`don't drink|do not drink`],` coffee, so I have tea.`],e:`Present simple: positive = the verb (We eat). Negative = don't + verb (I don't have, I don't drink).`}
   ]},
   {t:`3c. What's your favourite meal of the day? Where do you have it? What food and drink do you have?`, ins:`Write your own answer.`, wide:1, items:[{v:`meal`,free:1,sample:`My favourite meal of the day is breakfast.`,p:[`My favourite meal of the day is `,[``]],e:`Write full sentences with the present simple: I have… I drink… I eat…`}]}
@@ -875,7 +875,7 @@ const TIMEQ = `Telling the time: :15 = quarter past, :30 = half past, :45 = quar
 const LESSON_PE3 = [
  {name:`Telling the Time`, review:`Telling the time`, ex:[
   {t:`1. Complete the conversations.`, ea:`الوقت: quarter past (15) وhalf past (30) وquarter to (45)، ونستخدم past قبل نصف الساعة وto بعده.`, ins:`Write the missing words. Example: A: What time is it? B: It's quarter to eleven.`, wide:1, items:[{x:1,p:[`A: What time is it? B: It's quarter to eleven. (example)`]},
-   {p:[`A: It's ten to five. What `,[`time's|time is`],` your train?\nB: `,[`It's|It is`],` five fifteen.`],e:`What time's your train? asks for the time of the train (time's = time is). Answer with It's + the time. ${TIMEQ}`},
+   {p:[`A: It's ten to five. What `,[`time's|time is`],` your train?\nB: `,[`At`],` five fifteen.`],e:`What time's your train? asks for the time of the train (time's = time is). Answer with At + the time: At five fifteen. ${TIMEQ}`},
    {p:[`A: What time is `,[`it`],`?\nB: It's quarter `,[`past|to`],` four.`],e:`What time is it? asks for the time now. ${TIMEQ}`},
    {p:[`A: Hello. I'm `,[`sorry`],`. I'm late.\nB: You're two hours late – `,[`it's|it is`],` 11.30!`],e:`We say I'm sorry when we are late. It's 11.30 tells the time.`}
   ]}
@@ -1219,6 +1219,7 @@ function check(row,it,review,ex){
     f.classList.toggle("good",good); f.classList.toggle("bad",!good);
     if(!good) ok = false;
   });
+  if(it.combos){ let best=null,bs=-1; it.combos.forEach(c=>{ const sc=fields.filter((f,i)=>c[i].split("|").map(norm).includes(norm(f.value))).length; if(sc>bs){bs=sc;best=c;} }); ok=true; fields.forEach((f,i)=>{ const g=best[i].split("|").map(norm).includes(norm(f.value)); f.classList.toggle("good",g); f.classList.toggle("bad",!g); if(!g) ok=false; }); }
   if(it.uq){ const seen={}; fields.forEach(f=>{ const v=norm(f.value); if(v&&seen[v]){ f.classList.remove("good"); f.classList.add("bad"); ok=false; } seen[v]=1; }); }
   row.isOk = ok; if(exEl) updScore(exEl);
   if(ok && it.pend){ fb.className="fb try"; fb.textContent=`📝 كتابتك سليمة، لكن الإجابة النموذجية لهذا السؤال لم تُضَف بعد. استمعي مرة أخرى وتأكدي من إجابتك.`; return; }
