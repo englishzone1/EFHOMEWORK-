@@ -1205,7 +1205,7 @@ const VAL = {
  where:{re:RX(`^i (work|study) (in|at|for) [a-z]`),m:`اكتبي: I work in… أو I study at…`},
  yesno_do:{re:RX(`^(yes,? i do|no,? i (don't|do not))\\b`),m:`أجيبي بإجابة قصيرة: Yes, I do. أو No, I don't.`},
  words:{re:RX(`^[a-z0-9'][a-z0-9' ,.?!-]*$`),m:`اكتبي كلمات إنجليزية صحيحة.`},
- sent:{min:2,re:RX(`^[a-z0-9'@£$€][a-z0-9' ,.?!@£$€:/&()-]*$`),m:`اكتبي جملة كاملة بالإنجليزية من ثلاث كلمات على الأقل.`},
+ sent:{min:2,re:RX(`^[a-z0-9à-ÿ'@£$€][a-z0-9à-ÿ…' ,.?!@£$€:/&()-]*$`),m:`اكتبي جملة كاملة بالإنجليزية من ثلاث كلمات على الأقل.`},
  adverb:{min:4,re:RX(`\\b(always|usually|often|sometimes|never)\\b`),m:`اكتبي جملة كاملة من أربع كلمات على الأقل فيها always أو usually أو sometimes أو never، مثل: I usually watch TV.`},
  digits:{re:RX(`^[\\d ]+$`),m:`اكتبي الأرقام فقط كما تسمعينها.`},
  num:{re:RX(`^(\\d{1,4}|NUMW)$`),m:`اكتبي الرقم كما تسمعينه، مثل: 15.`},
@@ -1213,9 +1213,9 @@ const VAL = {
 };
 const SHORTW = new Set([`tv`,`mr`,`mrs`,`ms`,`dr`,`st`,`pc`,`cd`,`dvd`,`bbc`,`uk`,`usa`,`pm`,`sms`,`ps`,`hr`,`th`,`nd`,`rd`]);
 function plaus(v){
-  if(!v || /[؀-ۿ]/.test(v) || /[^a-z0-9 '.,?!\-@£$€:\/&()]/.test(v) || /([a-z])\1\1/.test(v)) return false;
-  const toks = v.split(/[\s,.?!:\/()&-]+/).filter(Boolean);
-  return toks.length>0 && toks.every(t=>/\d/.test(t) || t.includes(`@`) || SHORTW.has(t) || (t.length<=20 && /[aeiouy]/.test(t) && !/[^aeiouy'\d]{5,}/.test(t)));
+  if(!v || /[؀-ۿ]/.test(v) || /[^a-z0-9à-ÿ …'.,?!\-@£$€:\/&()]/.test(v) || /([a-z])\1\1/.test(v)) return false;
+  const toks = v.split(/[\s,.?!:\/()&…-]+/).filter(Boolean);
+  return toks.length>0 && toks.every(t=>/\d/.test(t) || t.includes(`@`) || SHORTW.has(t) || (t.length<=20 && /[aeiouyà-ÿ]/.test(t) && !/[^aeiouy'\d]{5,}/.test(t)));
 }
 function freeOK(raw,key){
   const v = norm(raw), V = VAL[key];
@@ -1856,15 +1856,577 @@ const PT1={id:`PT1`,lv:2,cls:`exam`,title:`Progress Test: Units 1–6`,ar:`ال�
  SPEAK([`Ask your partner: Where are you from? What languages do you speak? What do you do? What do you usually have for lunch? Do you like mornings?`,`Answer your partner's questions.`,`Ask your partner about Belinda: name, nationality, phone number, job, place of work, what she does in the morning.`,`Answer your partner's questions about Rafael Martinez: Mexican, 555 1198, police officer, works in the street, gets up at 6 a.m. and goes to the gym.`])
 ]};
 
-const TESTS=[FT1,FT2,FT3,FT4,FT5,FT6,PT1,
- {id:`FT7`,lv:2,cls:`u7`,title:`File Test 7`,ar:`اختبار الوحدة ${ORD[7]}`,sub:`Coming soon...`},
- {id:`FT8`,lv:2,cls:`u8`,title:`File Test 8`,ar:`اختبار الوحدة ${ORD[8]}`,sub:`Coming soon...`},
- {id:`FT9`,lv:3,cls:`u9`,title:`File Test 9`,ar:`اختبار الوحدة ${ORD[9]}`,sub:`Coming soon...`},
- {id:`FT10`,lv:3,cls:`u10`,title:`File Test 10`,ar:`اختبار الوحدة ${ORD[10]}`,sub:`Coming soon...`},
- {id:`FT11`,lv:3,cls:`u11`,title:`File Test 11`,ar:`اختبار الوحدة ${ORD[11]}`,sub:`Coming soon...`},
- {id:`FT12`,lv:3,cls:`u12`,title:`File Test 12`,ar:`اختبار الوحدة ${ORD[12]}`,sub:`Coming soon...`},
- {id:`PT2`,lv:3,cls:`exam`,title:`Progress Test: Units 7–12`,ar:`الاختبار المرحلي للوحدات من السابعة إلى الثانية عشرة`,sub:`Coming soon...`},
- {id:`END`,lv:0,cls:`exam`,title:`End of course test`,ar:`الاختبار النهائي`,sub:`Coming soon...`}];
+const PICK=(o,a)=>o.indexOf(a);
+const FT7={id:`FT7`,lv:2,cls:`u7`,title:`File Test 7`,ar:`اختبار الوحدة ${ORD[7]}`,sub:`Grammar, vocabulary, pronunciation, practical English, reading, writing and listening`,parts:[
+ {name:`Grammar`, review:`Grammar: object pronouns, word order in questions`, ex:[
+  {t:`1. Complete the sentences with me, you, him, her, it, us, or them.`, ins:`Example: A: Do you know Susie's mother? B: No, I don't know her.`, wide:1, ea:`ضمائر المفعول بعد الفعل: I → me، he → him، she → her، it → it، we → us، they → them.`, items:[
+   TQ.f(`A: Please call ___ tomorrow. I want to talk to you. B: OK. Is 10 o'clock a good time?`,[`me`]),
+   TQ.f(`A: Do people in your family eat a lot of cheese? B: Yes, they do. They like ___ a lot.`,[`it`]),
+   TQ.f(`A: You work with your husband, right? B: Yes, I work with ___.`,[`him`]),
+   TQ.f(`A: What's that? Is it for ___? B: Yes, coffee for you and me.`,[`me|us`]),
+   TQ.f(`A: Are the children in the garden? B: I don't see ___.`,[`them`])]},
+  {t:`2. Put the words in the correct order to make questions.`, ins:`Example: do you lunch where have ? → Where do you have lunch?`, wide:1, ea:`ترتيب السؤال: كلمة السؤال + do / does + الفاعل + الفعل + باقي الجملة.`, items:[
+   TQ.f(`favourite is your day what of part the ?\n___`,[`What is the favourite part of your day?|What is your favourite part of the day?|What's your favourite part of the day?|What's the favourite part of your day?`]),
+   TQ.f(`you on up what Saturday time do get ?\n___`,[`What time do you get up on Saturday?`]),
+   TQ.f(`go out Friday you on nights do ?\n___`,[`Do you go out on Friday nights?`]),
+   TQ.f(`relax you at how weekend do the ?\n___`,[`How do you relax at the weekend?`]),
+   TQ.f(`Marcus does Sundays when on have breakfast ?\n___`,[`When does Marcus have breakfast on Sundays?`])]}
+ ]},
+ {name:`Vocabulary`, review:`Vocabulary: free time activities and films`, ex:[
+  {t:`3. Choose a verb from the box to complete the phrases.`, ins:`Verbs: do, go, go out, meet, <s>play</s>, stay. Example: play computer games`, ea:`go out at night، meet friends، go to the beach، do sport، stay at home.`, items:(()=>{ const o=[`do`,`go`,`go out`,`meet`,`stay`]; return [[`at night`,`go out`],[`friends`,`meet`],[`to the beach`,`go`],[`sport`,`do`],[`at home`,`stay`]].map(r=>TQ.c(`___ ${r[0]}`,o,PICK(o,r[1]))); })()},
+  {t:`4. Complete the sentences. Write one word in each gap. The words are kinds of films.`, ins:`Example: It was a very funny comedy.`, wide:1, ea:`أنواع الأفلام: western، drama، science fiction، horror، action، comedy.`, items:[
+   TQ.f(`In a we___, there are people on horses.`,[`western|stern`]),
+   TQ.f(`Do you like dr___?`,[`dramas|amas`]),
+   TQ.f(`Lots of sc___ f___ films are set in space.`,[`science|ience`,`fiction|iction`]),
+   TQ.f(`My brother doesn't watch ho___ films; they are too scary.`,[`horror|rror`]),
+   TQ.f(`Top Gun: Maverick and Mission Impossible are ac___ films.`,[`action|tion`])]}
+ ]},
+ {name:`Pronunciation`, review:`Pronunciation: sounds`, ex:[
+  {t:`5. Match the words with the same sound.`, ins:`Words: always, <s>home</s>, how, Thursday, town, where. Example: husband → home`, ea:`/h/ في who وhow، و/θ/ في sixth وThursday، و/eə/ في chair وwhere، و/w/ في what وalways، و/aʊ/ في out وtown.`, items:(()=>{ const o=[`always`,`how`,`Thursday`,`town`,`where`]; return [[`who`,`how`],[`sixth`,`Thursday`],[`chair`,`where`],[`what`,`always`],[`out`,`town`]].map(r=>TQ.mc(`${r[0]} →`,o,PICK(o,r[1]))); })()}
+ ]},
+ {name:`Practical English`, review:`Practical English: dates`, ex:[
+  {t:`6. Look at the dates and write them in words.`, ins:`Example: 18/4 → the eighteenth of April`, wide:1, ea:`نكتب التاريخ: the + العدد الترتيبي + of + الشهر: the twenty-second of July.`, items:[[`22/7`,`the twenty-second of July|the twenty second of July`],[`12/12`,`the twelfth of December`],[`31/8`,`the thirty-first of August|the thirty first of August`],[`05/11`,`the fifth of November`],[`23/2`,`the twenty-third of February|the twenty third of February`]].map(r=>TQ.f(`${r[0]} → ___`,[r[1]]))}
+ ]},
+ {name:`Reading`, review:`Reading`, ex:[
+  {t:`1. Read the report. Choose the correct option.`, ins:`<div class="rtext"><b>Your free time</b><br>How do 18- to 24-year-olds in the UK spend their free time? A new study shows that a lot of young people stay at home in their free time.<br>So, what do they do in their free time at home? 55% play computer games and some of them spend time online. A lot of young people also watch films, but not on TV. In fact, 47% of people in the age group never watch TV!<br>When young people go out, they do different activities. Friends are very important to them and they meet friends for 24% of their free time. The cinema is a favourite place and 72% of 18- to 24-year-olds go to the cinema to watch films. People like different kinds of films – science fiction, comedies, horror – but 47% of them love animation films!<br>People also do sport or exercise. A lot of young people are healthy because they go for walks or swim, but 40% of teenagers in the UK don't know how to swim!<br>Young people also travel a lot and they usually buy their tickets online. 41% of all young people go to the beach on their holiday and 40% go on holiday with their family. Young people usually stay in a hotel when they are on holiday.</div>Example: A lot of 18- to 24-year-olds stay at home in their free time.`, ea:`ارجعي إلى التقرير وانتبهي للنسب المئوية.`, items:[
+   TQ.c(`55% of young people ___.`,[`play computer games`,`stay at home`],0),
+   TQ.c(`Young people ___ films on TV.`,[`don't watch`,`watch`],0),
+   TQ.c(`___ of people love animation films.`,[`47%`,`72%`],0),
+   TQ.c(`A lot of teenagers in the UK ___.`,[`don't know how to swim`,`don't go for walks`],0),
+   TQ.c(`___ of young people go to the beach for their holiday.`,[`40%`,`41%`],1)]},
+  {t:`2. Read the report again. Choose True or False.`, ins:`Example: A new study looks at what young people do in their free time. → True`, ea:`ارجعي إلى التقرير وتأكدي من الأرقام والكلمات مثل usually وnever.`, items:[[`A lot of young people stay at home in their free time.`,1],[`47% of young people never watch TV.`,1],[`24% of people meet with their friends.`,0],[`47% of young people go to the cinema.`,0],[`Young people like all kinds of films.`,1],[`Young people aren't healthy.`,0],[`47% of young people can't swim.`,0],[`Young people like to travel.`,1],[`Young people never go on holiday with their family.`,0],[`Young people always stay in a hotel when they are on holiday.`,0]].map(r=>TQ.tf(r[0],r[1]))}
+ ]},
+ {name:`Writing`, review:`Writing`, ex:[
+  {t:`Answer the questions about your free time.`, ins:`Write full sentences.`, wide:1, items:[[`Do you go out at the weekend?`,`Yes, I do.`],[`What time do you get up at the weekend?`,`I get up at 9.00.`],[`What do you do in your free time?`,`I read and meet friends.`],[`What's your favourite part of the weekend?`,`It's Friday evening.`],[`How do you relax?`,`I listen to music.`],[`What sport or exercise do you do?`,`I go for a walk.`],[`What do you do on Saturday nights?`,`I visit my family.`],[`Where do you meet your friends?`,`I meet them in a café.`],[`What kind of films do you like?`,`I like comedies.`],[`What's your favourite film and why?`,`My favourite film is… because it's funny.`]].map(r=>TQ.fr(r[0],`sent`,r[1]))}
+ ]},
+ {name:`Listening`, review:`Listening`, ex:[
+  {t:`1. Listen to an interview where two people talk about their weekends. Choose True or False.`, mp3:AUD(`ft07-1`), mp3n:`Listening 1`, ins:`Choose True or False.`, ea:`استمعي لما يفعله كل شخص في عطلة نهاية الأسبوع ومتى.`, items:[[`The man and woman are married.`,0],[`The man usually works at the weekend.`,1],[`The woman never goes out at the weekend.`,0],[`Her favourite part of the weekend is Saturday night.`,0],[`The man usually gets up at 8 o'clock on Sunday mornings.`,1]].map(r=>TQ.tf(r[0],r[1]))},
+  {t:`2. Listen to five conversations. Choose the correct answer.`, mp3:AUD(`ft07-2`), mp3n:`Listening 2`, ins:`Choose A, B, or C.`, ea:`استمعي لنوع الفيلم، والضمير، والتاريخ.`, items:[
+   TQ.mc(`What kind of film do the two people go to see?`,[`An action film.`,`A western.`,`A science fiction film.`],2),
+   TQ.mc(`What does the director ask the actor to say?`,[`Don't talk to her!`,`Don't talk to him!`,`Don't talk to me!`],0),
+   TQ.mc(`What does Juan usually do on Saturday?`,[`He plays tennis.`,`He works.`,`He goes to the mountains with his family.`],2),
+   TQ.mc(`What kind of films does the man like?`,[`American films.`,`French and Spanish films.`,`Chinese films.`],1),
+   TQ.mc(`When is Ben's birthday?`,[`26th July`,`5th August`,`6th August`],1)]}
+ ]},
+ SPEAK([`Ask your partner: When is your birthday? What sport or exercise do you do? What do you usually do in your free time? How do you relax at the weekend? What kind of films do you like?`,`Ask your partner about Hannah: birthday, afternoons, films, weekend activities.`,`Answer your partner's questions about Gregor: birthday 16th April; afternoons – walk the dog, play tennis; films – horror and science fiction; weekends – meet friends, go to the beach.`])
+]};
+
+const FT8={id:`FT8`,lv:2,cls:`u8`,title:`File Test 8`,ar:`اختبار الوحدة ${ORD[8]}`,sub:`Grammar, vocabulary, pronunciation, reading, writing and listening`,parts:[
+ {name:`Grammar`, review:`Grammar: can / can't, like / love / hate + -ing`, ex:[
+  {t:`1. Write can or can't to complete the dialogues.`, ins:`Example: A: Can I sit here? B: Yes, you can.`, ea:`can للقدرة أو السماح، وcan't للنفي. الإجابة القصيرة: Yes, I can. / No, she can't.`, items:[
+   TQ.f(`A: When ___ you come? B: I can come at 10 o'clock.`,[`can`]),
+   TQ.f(`A: Can your sister speak English? B: No, she ___.`,[`can't|cannot`]),
+   TQ.f(`A: Can we take photos in the museum? B: No, you ___.`,[`can't|cannot`]),
+   TQ.f(`A: Can you help me? B: Yes. I ___.`,[`can`]),
+   TQ.f(`A: Oh no! We ___ park here. B: Don't worry! We can park over there.`,[`can't|cannot`])]},
+  {t:`2. Complete the sentences with a verb from the box. Use the verb + -ing.`, ins:`Verbs: cook, drive, get, go, swim, <s>watch</s>. Example: Rafael loves watching horror films.`, bank:[`cook`,`drive`,`get`,`go`,`swim`], wide:1, ea:`بعد love / like / hate / enjoy نضيف ing للفعل: going، cooking، driving، swimming (نضاعف m)، getting (نضاعف t).`, items:[
+   TQ.f(`Mike loves ___ shopping.`,[`going`]),
+   TQ.f(`I really like ___ paella. It's my favourite dish.`,[`cooking`]),
+   TQ.f(`My husband hates ___ the car in the city.`,[`driving`]),
+   TQ.f(`Do you like ___ in the sea?`,[`swimming`]),
+   TQ.f(`Jasmina doesn't like ___ up early.`,[`getting`])]}
+ ]},
+ {name:`Vocabulary`, review:`Vocabulary: verb phrases and free time`, ex:[
+  {t:`3. Choose the correct verb to complete the phrases.`, ins:`Verbs: play, park, pay, <s>take</s>, use. Example: take photos`, bank:[`play`,`park`,`pay`,`use`], wide:1, ea:`use your phone، play football، pay by cash، have a coffee، park here.`, items:[
+   TQ.f(`___ your phone`,[`use`]),
+   TQ.f(`___ football`,[`play`]),
+   TQ.f(`___ by cash`,[`pay`]),
+   TQ.f(`___ a coffee`,[`have|take`]),
+   TQ.f(`___ here`,[`park`])]},
+  {t:`4. Choose the correct word.`, ins:`Example: My father reads a newspaper every day.`, ea:`buy clothes، go for a walk، cook for your family، do yoga، eat out.`, items:[
+   TQ.c(`I don't always ___ clothes when I go shopping.`,[`buy`,`make`],0),
+   TQ.c(`We like ___ for a walk at the weekend.`,[`doing`,`going`],1),
+   TQ.c(`Do you always ___ for your family?`,[`cook`,`eat`],0),
+   TQ.c(`My daughter loves ___ yoga.`,[`doing`,`going`],0),
+   TQ.c(`My parents hate ___ out. They don't like restaurants.`,[`cooking`,`eating`],1)]}
+ ]},
+ {name:`Pronunciation`, review:`Pronunciation: sounds and word stress`, ex:[
+  {t:`5. Match the words with the same sound.`, ins:`Words: book, car, cat, <s>computer</s>, going, school. Example: teacher → computer`, ea:`/uː/ في food وschool، و/ʊ/ في cook وbook، و/ŋ/ في singer وgoing، و/æ/ في can وcat، و/ɑː/ في can't وcar.`, items:(()=>{ const o=[`book`,`car`,`cat`,`going`,`school`]; return [[`food`,`school`],[`cook`,`book`],[`singer`,`going`],[`can`,`cat`],[`can't`,`car`]].map(r=>TQ.mc(`${r[0]} →`,o,PICK(o,r[1]))); })()},
+  {t:`6. Which is the stressed syllable? Choose 1, 2, or 3.`, ins:`Example: camp|ing → 1`, ea:`المقطع المنبور: in-STRUC-tor، PRAC-ti-cal، CI-ne-ma، CLA-ssi-cal، dis-AS-ter.`, items:[[`in|struc|tor`,1],[`prac|ti|cal`,0],[`ci|ne|ma`,0],[`cla|ssi|cal`,0],[`dis|as|ter`,1]].map(r=>TQ.mc(`${r[0]} →`,[`1`,`2`,`3`],r[1]))}
+ ]},
+ {name:`Reading`, review:`Reading`, ex:[
+  {t:`1. Read the information. Choose True or False.`, ins:`<div class="rtext"><b>University Club Bulletin Board</b><br>What do you like doing in your free time? At the university, we have a lot of different clubs, so read this and find a club for you.<br>Do you like singing? If 'yes', then the singing club is for you! We meet every Monday and Thursday evenings from 8 p.m. until 10 p.m. Then, on the third Thursday of every month, we have a show. A lot of people from the town come and watch our shows. Come and see our club. It is free!<br>Do you like watching films but hate going to the cinema? Then the cinema club is perfect for you! Every Friday evening, we watch a new film at the university and then we talk about the film. It's a great way to see films and make new friends, and at £5 it isn't expensive. Come this Friday and meet the club.<br>What do you like doing to relax? A lot of students enjoy doing things like playing sports or running, but these things are not for all people. Students also like doing yoga to relax. Our yoga classes start every Saturday morning at half past nine. The price is £6 for each class, or you can book three classes for £15.<br>Do you love eating but hate cooking? We know that eating out is expensive and that fast food is not good. So, come to our club and learn how cooking can be fun. The classes are on Monday evenings at 7:45 in the university restaurant. We have six classes for each course and the price is £72, but you can eat the food you cook!</div>Example: The bulletin board has information about four different clubs. → True`, ea:`ارجعي إلى النص وتأكدي من الأيام والأوقات والأسعار.`, items:[[`The singing club meets on two evenings every week.`,1],[`The singing club has a show every week.`,0],[`A lot of people from the town are in the singing club.`,0],[`In the cinema club, you can watch a film on Friday evenings.`,1],[`People usually go with their old friends to the cinema club.`,0],[`The yoga classes start at 9:30 on Saturday morning.`,1],[`The price of the yoga classes is £15 for every class.`,0],[`It isn't cheap to eat out.`,1],[`The cooking club is for people who hate cooking.`,1],[`The price of the cooking club is £72.`,1]].map(r=>TQ.tf(r[0],r[1]))},
+  {t:`2. Read the text again. Complete the answers to the questions.`, ins:`Example: What clubs does the university have? → It has singing, cinema, yoga, and cooking clubs.`, wide:1, ea:`انسخي المعلومة من النص.`, items:[
+   TQ.f(`What time does the singing club meet?\nIt meets ___.`,[`from 8 p.m. until 10 p.m.|from 8 pm until 10 pm|from 8 p.m. to 10 p.m.|from 8 until 10|from 8 p.m. till 10 p.m.`]),
+   TQ.f(`What is the price for the cinema club?\nIt is ___.`,[`£5|5 pounds|five pounds`]),
+   TQ.f(`What do people do at the cinema club?\nThey ___ and ___.`,[`watch a new film|watch a film|watch films`,`talk about it|talk about the film|then talk about it|then talk about the film`]),
+   TQ.f(`What kind of classes can you go to on Saturday mornings?\nYou can go to ___ on Saturday mornings.`,[`yoga|yoga classes`]),
+   TQ.f(`When are the cooking classes?\nThey are on ___ at ___.`,[`Monday evenings|Monday evening|Mondays`,`7:45|7.45`])]}
+ ]},
+ {name:`Writing`, review:`Writing`, ex:[
+  {t:`Answer the questions about your town / city with complete sentences.`, ins:`Write full sentences.`, wide:1, items:[[`What can people buy in your town / city?`,`People can buy clothes and food.`],[`Are clothes expensive in your town / city?`,`No, they aren't.`],[`Where can people eat / drink in your town / city?`,`They can eat in restaurants and cafés.`],[`What can people do in their free time in your town / city?`,`They can go to the park.`],[`Which places in your town / city are interesting for people to visit?`,`The old city and the museum.`]].map(r=>TQ.fr(r[0],`sent`,r[1]))}
+ ]},
+ {name:`Listening`, review:`Listening`, ex:[
+  {t:`1. Listen to Rosa telling Tom about her likes and dislikes. Choose A, B, or C.`, mp3:AUD(`ft08-1`), mp3n:`Listening 1`, ins:`Choose A, B, or C.`, ea:`استمعي لما تحبه Rosa وما تكرهه.`, items:[
+   TQ.mc(`Rosa doesn't like…`,[`going for walks`,`doing yoga`,`being hot`],2),
+   TQ.mc(`She likes…`,[`cycling`,`running`,`watching sports`],0),
+   TQ.mc(`She enjoys eating out and camping…`,[`at the weekend`,`with her friends`,`with her family`],1),
+   TQ.mc(`Rosa and her boyfriend like…`,[`swimming`,`taking photos`,`eating out`],0),
+   TQ.mc(`Rosa hates…`,[`driving`,`flying`,`travelling`],1)]},
+  {t:`2. Listen to five conversations. Choose True or False.`, mp3:AUD(`ft08-2`), mp3n:`Listening 2`, ins:`Choose True or False.`, ea:`استمعي لـ can وcan't جيدًا.`, items:[[`You can't take photos in the museum.`,1],[`The man loves Chinese food.`,1],[`The woman can park here.`,0],[`The man can't shop now.`,0],[`The man likes doing sport.`,0]].map(r=>TQ.tf(r[0],r[1]))}
+ ]},
+ SPEAK([`Ask your partner: What do you like doing in your free time? What sports do you enjoy watching? Where do you like going when you go out? Is there anything you don't like doing? Can you drive?`,`Ask your partner about Marek's weekend: what he usually does, who with, and what time.`,`Answer your partner's questions about Isra's weekends: Saturday 10 a.m. yoga with Ellie, 1 p.m. lunch with Maha, 9 p.m. theatre with Sara; Sunday 9 a.m. swimming with Ellie, 8 p.m. dinner with Maxine.`])
+]};
+
+const FT9={id:`FT9`,lv:3,cls:`u9`,title:`File Test 9`,ar:`اختبار الوحدة ${ORD[9]}`,sub:`Grammar, vocabulary, pronunciation, practical English, reading, writing and listening`,parts:[
+ {name:`Grammar`, review:`Grammar: present continuous and present simple`, ex:[
+  {t:`1. Complete the sentences. Use the present continuous form of the verb in brackets.`, ins:`Example: I can't talk right now. I am driving (drive) to the office.`, wide:1, ea:`المضارع المستمر: am / is / are + الفعل + ing: She's cooking، We're staying، I'm having.`, items:[
+   TQ.f(`Sam ___ (cook) a meal for his friends.`,[`is cooking|'s cooking|s cooking`]),
+   TQ.f(`Megan ___ (shop). She wants to buy some books.`,[`is shopping|'s shopping|s shopping`]),
+   TQ.f(`We ___ (stay) in a hotel in the city centre.`,[`are staying|'re staying|re staying`]),
+   TQ.f(`The children ___ (do) their homework in their bedrooms.`,[`are doing|'re doing|re doing`]),
+   TQ.f(`I ___ (have) a great time in London.`,[`am having|'m having|m having`])]},
+  {t:`2. Choose the correct verb form.`, ins:`Example: We always eat lunch at home on Sundays.`, ea:`المضارع البسيط للعادة (sometimes, usually, always)، والمضارع المستمر لما يحدث الآن (at the moment, right now).`, items:[
+   TQ.c(`Max sometimes ___ in a coffee shop at the weekend.`,[`works`,`is working`],0),
+   TQ.c(`Julio ___ an email to his mother at the moment.`,[`writes`,`is writing`],1),
+   TQ.c(`That's my girlfriend over there. She ___ a red dress.`,[`wears`,`is wearing`],1),
+   TQ.c(`We usually ___ the TV after work.`,[`watch`,`are watching`],0),
+   TQ.c(`Tina ___ for her train right now.`,[`waits`,`is waiting`],1)]}
+ ]},
+ {name:`Vocabulary`, review:`Vocabulary: travel and clothes`, ex:[
+  {t:`3. Complete the email with a verb from the box. Use the correct verb form.`, ins:`Verbs: buy, arrive, <s>have</s>, rent, pack, stay.<div class="rtext">Hi Penny, We're on holiday now in Venice and we're having a great time! Here are some photos of everything so far. The first photo is me. I'm at home and I'm (1) ___ my suitcase. I have a lot of clothes! Then, in the second photo, you can see us at the airport, and in the third photo, we're (2) ___ in Venice. It's so exciting! In the fourth photo, you can see us at the hotel. We're (3) ___ in a fantastic hotel in the centre of the town. In the next photo, we're (4) ___ presents for our friends. Don't worry… I have a present for you, too! And in the last photo, it's me in our little car – we're (5) ___ a car here for a week! See you on Monday! Carla</div>`, bank:[`buy`,`arrive`,`rent`,`pack`,`stay`], wide:1, ea:`بعد I'm / we're نضيف ing: packing، arriving (نحذف e)، staying، buying، renting.`, items:[
+   TQ.f(`I'm (1) ___ my suitcase.`,[`packing`]),
+   TQ.f(`We're (2) ___ in Venice.`,[`arriving`]),
+   TQ.f(`We're (3) ___ in a fantastic hotel.`,[`staying`]),
+   TQ.f(`We're (4) ___ presents for our friends.`,[`buying`]),
+   TQ.f(`We're (5) ___ a car here for a week!`,[`renting`])]},
+  {t:`4. Complete the sentences. Write one word in each gap. The words are clothes.`, ins:`Example: I like wearing jeans and a T-shirt at the weekends.`, wide:1, ea:`الملابس: sweater، coat، suit، shorts، dress.`, items:[
+   TQ.f(`I'm wearing a sw___ because the classroom is cold.`,[`sweater|eater`]),
+   TQ.f(`Do you know where my c___ is? It's raining outside.`,[`coat|oat`]),
+   TQ.f(`I work in a bank. I wear a s___, a shirt, and tie every day.`,[`suit|uit`]),
+   TQ.f(`It's very nice outside today. A lot of people are wearing T-shirts, sh___ and sunglasses.`,[`shorts|orts`]),
+   TQ.f(`You look nice. Is that a new dr___?`,[`dress|ess`])]}
+ ]},
+ {name:`Pronunciation`, review:`Pronunciation: word stress`, ex:[
+  {t:`5. Which is the stressed syllable? Choose 1, 2, or 3.`, ins:`Example: in|ter|net → 1`, ea:`المقطع المنبور: TRA-ve-lling، IN-ter-view، COM-pan-ies، im-POR-tant، TROU-sers.`, items:[[`tra|ve|lling`,3,0],[`in|ter|view`,3,0],[`com|pan|ies`,3,0],[`im|por|tant`,3,1],[`trou|sers`,2,0]].map(r=>TQ.mc(`${r[0]} →`,[`1`,`2`,`3`].slice(0,r[1]),r[2]))}
+ ]},
+ {name:`Practical English`, review:`Practical English: invitations and offers`, ex:[
+  {t:`6. Complete the dialogues with a phrase from the box.`, ins:`Example: A: Would you like a burger? B: Yes, please. I'm hungry!`, ea:`قبول الدعوة: Yes, I'd love to. رفضها: Sorry, I can't. رفض العرض: No, thanks. اقتراح: How about a coffee? وللموعد: See you there.`, items:(()=>{ const o=[`How about a coffee`,`Yes, I'd love to`,`No, thanks`,`See you there`,`Sorry, I can't`]; return [
+   TQ.c(`A: Would you like to go to the football match tomorrow evening? B: ___. A: Great! I'll get tickets!`,o,1),
+   TQ.c(`A: Let's meet at 8 o'clock at the restaurant. B: OK. ___ at 8 o'clock then.`,o,3),
+   TQ.c(`A: Would you like a sandwich? B: ___. I'm not hungry.`,o,2),
+   TQ.c(`A: ___? B: Oh, yes please. A: Do you take milk and sugar?`,o,0),
+   TQ.c(`A: Would you like to go to the cinema on Friday evening? B: ___. I'm busy this Friday.`,o,4)]; })()}
+ ]},
+ {name:`Reading`, review:`Reading`, ex:[
+  {t:`1. Read the blog. Choose True or False.`, ins:`<div class="rtext"><b>My work experience</b><br>Matteo Lopez studies at university and works in a café. Every day, he writes a blog about his work experience and his life.<br><b>Monday, 12th October</b><br>Every morning, I get up at 7 o'clock and go to the café. It's not a big café. This morning only four people are working here.<br>Usually, I work in the kitchen doing small jobs, but today I'm working in the café cleaning tables and serving customers. Right now, I'm having lunch. I always have lunch at the café because the food is delicious and it isn't expensive. Usually, after lunch, I go to university to study, but today I'm staying at work in the afternoon because we are really busy. At university, I'm studying business and I want to work in an office.<br>I like my job because every day I meet new people and that is interesting. Also, I don't need to wear special clothes. Today, I'm wearing a T-shirt and jeans. The only thing I don't like is getting up early in the morning.<br>I have a girlfriend. Her name is Monica and she works in a school. She wants to be a teacher. Today, she isn't working as she's travelling to the USA to visit her sister. At the moment, she's at the airport waiting for her flight.<br>I usually see her every day and sometimes we go to the cinema together. We love watching action films.</div>Example: Matteo works in a café. → True`, ea:`ارجعي إلى المدونة وفرّقي بين ما يحدث عادة وما يحدث اليوم.`, items:[[`Matteo always gets up at 7 a.m.`,1],[`The café is big.`,0],[`Matteo usually works in the kitchen.`,1],[`At the moment, he is having lunch.`,1],[`The food in the café is expensive.`,0],[`Matteo never goes to university in the afternoon.`,0],[`He is wearing a suit today.`,0],[`His girlfriend isn't working today.`,1],[`At the moment, she is waiting for a taxi.`,0],[`Matteo loves watching action films with his girlfriend.`,1]].map(r=>TQ.tf(r[0],r[1]))},
+  {t:`2. Read the blog again. Complete the sentences with one word.`, ins:`Example: Matteo writes a blog about his work experience.`, wide:1, ea:`الكلمات من المدونة: four، delicious، busy، teacher، airport.`, items:[
+   TQ.f(`There are f___ people working at the café.`,[`four|our`]),
+   TQ.f(`The food at the café is d___.`,[`delicious|elicious`]),
+   TQ.f(`Matteo isn't studying today because the café is really b___.`,[`busy|usy`]),
+   TQ.f(`His girlfriend wants to be a t___ in a school.`,[`teacher|eacher`]),
+   TQ.f(`At the moment, Monica is at the a___.`,[`airport|irport`])]}
+ ]},
+ {name:`Writing`, review:`Writing`, ex:[
+  {t:`Write an email to your new online friend, Juan.`, ins:`Write about: your address and phone, family, work / school, free-time activities, usual schedule. Then ask Juan five questions about these topics.<br>Start: Hi Juan, Nice to meet you. Let me tell you about myself: … Now let me ask you some questions! …`, items:[TQ.ta(`Your email:`,`Hi Juan, Nice to meet you. I live in Damascus… What do you do? …`)]}
+ ]},
+ {name:`Listening`, review:`Listening`, ex:[
+  {t:`1. Listen to Eva and Gabor's telephone conversation. Choose True or False.`, mp3:AUD(`ft09-1`), mp3n:`Listening 1`, ins:`Choose True or False.`, ea:`استمعي لما يفعله كل شخص الآن.`, items:[[`Gabor is at work.`,0],[`Eva is doing the housework.`,1],[`Adam is helping his mother.`,0],[`Eva thinks Adam is probably talking to his friends.`,1],[`Gabor isn't stopping at the supermarket.`,0]].map(r=>TQ.tf(r[0],r[1]))},
+  {t:`2. Listen to five conversations and answer the questions.`, mp3:AUD(`ft09-2`), mp3n:`Listening 2`, ins:`Choose A, B, or C.`, ea:`استمعي للتفاصيل: السبب، والمكان، والملابس.`, items:[
+   TQ.mc(`Why is the woman getting a taxi to the airport?`,[`because it's expensive`,`because it's fast`,`because it's slow`],1),
+   TQ.mc(`Where are Paul's parents staying?`,[`at Paul's flat`,`with Paul's friends`,`at a hotel`],2),
+   TQ.mc(`What would the woman like for lunch?`,[`a burger`,`a sandwich`,`she isn't hungry`],2),
+   TQ.mc(`Where is the man?`,[`leaving the train station`,`arriving at the bus stop`,`outside the restaurant`],1),
+   TQ.mc(`The man is wearing ___.`,[`a black hat`,`a green hat`,`a green coat`],2)]}
+ ]},
+ SPEAK([`Ask your partner: What do you usually do on Mondays? What do you usually do in the evenings? What are you doing now? What do you usually wear in summer? What do you wear to work / school?`,`Ask your partner about a job: job, hours of work, money, phone number.`,`Answer your partner's questions: Worker in a factory, 8 a.m. – 4 p.m. Monday – Friday, £96 per day, 0115 496 0133.`])
+]};
+
+const FT10={id:`FT10`,lv:3,cls:`u10`,title:`File Test 10`,ar:`اختبار الوحدة ${ORD[10]}`,sub:`Grammar, vocabulary, pronunciation, reading, writing and listening`,parts:[
+ {name:`Grammar`, review:`Grammar: there is / there are, was / were`, ex:[
+  {t:`1. Choose the correct word.`, ins:`Example: There is a hotel in the town.`, ea:`There is للمفرد وThere are للجمع. some في الإثبات، وany في السؤال والنفي.`, items:[
+   TQ.c(`There ___ great views from some of the rooms.`,[`is`,`are`],1),
+   TQ.c(`There ___ any people on the beach.`,[`are`,`aren't`],1),
+   TQ.c(`There are ___ nice pictures on the wall.`,[`some`,`any`],0),
+   TQ.c(`Are there ___ tables in the garden?`,[`some`,`any`],1),
+   TQ.c(`There are ___ beautiful places to visit.`,[`some`,`any`],0)]},
+  {t:`2. Choose the correct word.`, ins:`Example: Tamas was a student in 2017.`, ea:`was مع I / he / she / it، وwere مع you / we / they. النفي wasn't / weren't.`, items:[
+   TQ.c(`___ he late for work this morning?`,[`Was`,`Were`],0),
+   TQ.c(`We ___ at home yesterday. We were at the swimming pool.`,[`were`,`weren't`],1),
+   TQ.c(`Meg ___ in class yesterday.`,[`wasn't`,`weren't`],0),
+   TQ.c(`___ you in Brazil on holiday last year?`,[`Was`,`Were`],1),
+   TQ.c(`They ___ famous.`,[`wasn't`,`weren't`],1)]}
+ ]},
+ {name:`Vocabulary`, review:`Vocabulary: prepositions of place`, ex:[
+  {t:`3. Complete the sentences with in, on, or under.`, ins:`Example: We're eating lunch in a café.`, ea:`on فوق السطح (on the table, on the floor)، under تحت (under the trees, under the bed)، in داخل (in a suitcase).`, items:[
+   TQ.c(`Our breakfast is ___ the table.`,[`in`,`on`,`under`],1),
+   TQ.c(`There was a nice place to sit ___ the trees.`,[`in`,`on`,`under`],2),
+   TQ.c(`When I travel, I put my clothes ___ a suitcase.`,[`in`,`on`,`under`],0),
+   TQ.c(`I put my shoes ___ the bed.`,[`in`,`on`,`under`],2),
+   TQ.c(`Please don't leave your clothes ___ the floor.`,[`in`,`on`,`under`],1)]},
+  {t:`4. Complete the text with in, at, or on.`, ins:`<div class="rtext">Paula lives in Madrid. She works (1) ___ the university, but she doesn't go to work every day. Sometimes she works (2) ___ home. There's a small room next to her bedroom and she works (3) ___ this room. Paula isn't at home right now – she's (4) ___ a bus. She wants to meet some friends (5) ___ the bus stop in the city centre.</div>`, ea:`at the university، at home، in this room، on a bus، at the bus stop.`, items:[
+   TQ.c(`She works (1) ___ the university.`,[`in`,`at`,`on`],1),
+   TQ.c(`Sometimes she works (2) ___ home.`,[`in`,`at`,`on`],1),
+   TQ.c(`She works (3) ___ this room.`,[`in`,`at`,`on`],0),
+   TQ.c(`She's (4) ___ a bus.`,[`in`,`at`,`on`],2),
+   TQ.c(`She wants to meet some friends (5) ___ the bus stop.`,[`in`,`at`,`on`],1)]}
+ ]},
+ {name:`Pronunciation`, review:`Pronunciation: /eə/ and /ɪə/, word stress`, ex:[
+  {t:`5. Choose the word that has a different sound.`, ins:`Example: chair, near, wear → near`, ea:`/eə/ في where, there, their, repair, airport، و/ɪə/ في dear, near, here, year, we're, idea, really.`, items:[[[`where`,`there`,`dear`],2],[[`near`,`repair`,`their`],0],[[`here`,`there`,`year`],1],[[`airport`,`we're`,`where`],1],[[`idea`,`really`,`year`],0]].map(r=>TQ.mc(`${r[0].join(`, `)} →`,r[0],r[1]))},
+  {t:`6. Which is the stressed syllable? Choose 1, 2, 3, 4, or 5.`, ins:`Example: ho|tel → 2`, ea:`المقطع المنبور: re-MEM-ber، BEAU-ti-ful، VIS-it-or، u-ni-VER-si-ty، CEN-tu-ry.`, items:[[`re|mem|ber`,3,1],[`beau|ti|ful`,3,0],[`vis|it|or`,3,0],[`u|ni|ver|si|ty`,5,2],[`cen|tu|ry`,3,0]].map(r=>TQ.mc(`${r[0]} →`,[`1`,`2`,`3`,`4`,`5`].slice(0,r[1]),r[2]))}
+ ]},
+ {name:`Reading`, review:`Reading`, ex:[
+  {t:`1. Read the reviews. Complete the sentences with one word.`, ins:`<div class="rtext"><b>Hotel Reviews – The Lux</b><br>I was in The Lux Hotel when we were on holiday last July. I was there with my wife and our room was fantastic. There are great views from many of the rooms and there are lots of things to do near the hotel. There is a nice restaurant in the hotel, but you can also go outside, as there are some nice restaurants near the hotel. We were there for four nights and it was wonderful. <i>Max ★★★★</i><br><br>What a terrible hotel. Don't stay in The Lux. I was there with my husband last year and it wasn't good. It's a big hotel… there are 600 rooms. Our room was very small and there was no view from any of the windows. There is a restaurant in the hotel, but the food was terrible and it was very expensive. <i>Lucia ★</i><br><br>This hotel is really great! There is a small park near the entrance, and on the fourth floor there is a swimming pool and a spa. There is a restaurant and the food is delicious. Outside the hotel, there are a lot of places to visit. I was there with my family for two weeks. The children were really happy. Perfect! <i>Javier ★★★★★</i><br><br>I don't like The Lux Hotel, but my wife says it's good. I think she likes it because there are a lot of places to visit near the hotel. The bedrooms are OK and there are good views from some of the rooms. There is wi-fi in the hotel, but the price isn't cheap. <i>Ryan ★★★</i></div>Example: There are four reviews of the hotel.`, wide:1, ea:`ابحثي في المراجعة المطلوبة عن الكلمة الناقصة.`, items:[
+   TQ.f(`Max writes that there are great ___ from the rooms.`,[`views`]),
+   TQ.f(`Max was in The Lux for ___ nights with his wife.`,[`four|4`]),
+   TQ.f(`There are ___ rooms in the hotel.`,[`600|six hundred`]),
+   TQ.f(`Lucia writes that the restaurant was ___ and the food was terrible.`,[`expensive`]),
+   TQ.f(`Javier's children were very ___ in the hotel.`,[`happy`])]},
+  {t:`2. Read the reviews again. Choose True or False.`, ins:`Choose True or False.`, ea:`ارجعي إلى المراجعات الأربع وانتبهي لصاحب كل رأي.`, items:[[`There aren't any places to eat outside the hotel.`,0],[`Lucia was in The Lux last year with her husband.`,1],[`There was a great view from the room Lucia was in.`,0],[`Lucia gives The Lux one star in her review.`,1],[`There is a park near the hotel.`,1],[`There is a swimming pool in the hotel.`,1],[`Javier was in the hotel for a week.`,0],[`Ryan's wife likes The Lux Hotel.`,1],[`There are a lot of places to visit near the hotel.`,1],[`There is cheap wi-fi in the hotel.`,0]].map(r=>TQ.tf(r[0],r[1]))}
+ ]},
+ {name:`Writing`, review:`Writing`, ex:[
+  {t:`Write a short description of your last holiday and the place you stayed in.`, ins:`Answer the questions: Where were you on your last holiday? Who were you with? When were you there? Where was your hotel? What was there in the hotel? Was the hotel nice? Why (not)?`, items:[TQ.ta(`Your description:`,`On my last holiday I was in Latakia with my family. We were there in August. Our hotel was near the sea…`)]}
+ ]},
+ {name:`Listening`, review:`Listening`, ex:[
+  {t:`1. Listen to a woman talking to a receptionist in a hotel. Choose True or False.`, mp3:AUD(`ft10-1`), mp3n:`Listening 1`, ins:`Choose True or False.`, ea:`استمعي لوصف الغرف والمطاعم بدقة.`, items:[[`There is a view of the mountains from one room.`,1],[`There isn't a lift.`,0],[`The first room the woman sees is small.`,1],[`The room on the second floor has a view of the mountains.`,0],[`There are three restaurants near the hotel.`,1]].map(r=>TQ.tf(r[0],r[1]))},
+  {t:`2. Listen to five conversations and answer the questions.`, mp3:AUD(`ft10-2`), mp3n:`Listening 2`, ins:`Choose A, B, or C.`, ea:`استمعي للأماكن وحروف الجر (on, under, at, in).`, items:[
+   TQ.mc(`Where was the man at 7 o'clock yesterday?`,[`at the swimming pool`,`on the bus`,`at home`],2),
+   TQ.mc(`What does the man say is fantastic in the hotel?`,[`the views`,`the gym`,`the swimming pool`],0),
+   TQ.mc(`Where was the remote control?`,[`on the table`,`under the table`,`under the chair`],2),
+   TQ.mc(`Where was the woman on Saturday?`,[`at the beach`,`in the garden`,`in the park`],1),
+   TQ.mc(`Where was Anton at 7 p.m. last night?`,[`at home`,`in the shopping centre`,`in the cinema`],1)]}
+ ]},
+ SPEAK([`Describe the house / flat you were in when you were a child. Where was it? What rooms were there? What was there in your bedroom?`,`Ask your partner about their town: good places to eat, interesting places to visit, good places to shop, nice parks, a good cinema, a place with a beautiful view.`,`Answer your partner's questions about your town / area.`])
+]};
+
+const MAP11=`<svg viewBox="0 0 520 250" style="width:100%;max-width:460px;display:block;margin:8px 0;background:#fff;border:1px solid #d5deea;border-radius:10px" font-family="sans-serif" font-size="14">
+<rect x="0" y="70" width="520" height="40" fill="#eef1f5"/><rect x="250" y="110" width="45" height="140" fill="#eef1f5"/>
+<g fill="#cfd8e3" stroke="#7d8fa6"><rect x="90" y="20" width="80" height="34"/><rect x="200" y="20" width="80" height="34"/><rect x="310" y="20" width="80" height="34"/><rect x="150" y="122" width="90" height="30"/><rect x="150" y="164" width="90" height="30"/><rect x="150" y="206" width="90" height="30"/><rect x="320" y="122" width="90" height="30"/></g>
+<g text-anchor="middle" fill="#1d2733"><text x="130" y="42">bank</text><text x="240" y="42">hotel</text><text x="350" y="42">cinema</text><text x="195" y="142">supermarket</text><text x="195" y="184">gym</text><text x="195" y="226">bookshop</text><text x="365" y="142">museum</text></g>
+<circle cx="70" cy="100" r="6" fill="#d64545"/><text x="20" y="135" font-style="italic" fill="#d64545">you are here</text></svg>`;
+
+const FT11={id:`FT11`,lv:3,cls:`u11`,title:`File Test 11`,ar:`اختبار الوحدة ${ORD[11]}`,sub:`Grammar, vocabulary, pronunciation, practical English, reading, writing and listening`,parts:[
+ {name:`Grammar`, review:`Grammar: past simple`, ex:[
+  {t:`1. Choose the correct past simple form.`, ins:`Example: Did you watch TV last night?`, ea:`بعد did / didn't يأتي الفعل في أصله (go, rain, carry). السؤال: Did you have…؟ Where did you get…؟`, items:[
+   TQ.c(`My father didn't ___ the suitcases.`,[`carry`,`carried`],0),
+   TQ.c(`What time did you ___ to the supermarket?`,[`went`,`go`],1),
+   TQ.c(`It didn't ___ yesterday.`,[`rained`,`rain`],1),
+   TQ.c(`Where ___ that dress? It's beautiful.`,[`did you get`,`you got`],0),
+   TQ.c(`___ lunch at home?`,[`Had you`,`Did you have`],1)]},
+  {t:`2. Complete the sentences. Use the past simple form of the verb in brackets.`, ins:`Example: Eric did (do) his homework last night.`, wide:1, ea:`الماضي: study → studied، stop → stopped. والأفعال الشاذة: have → had، go → went، get → got.`, items:[
+   TQ.f(`I ___ (study) French at school.`,[`studied`]),
+   TQ.f(`Roberto ___ (have) pasta for lunch.`,[`had`]),
+   TQ.f(`We ___ (go) to the museum last weekend.`,[`went`]),
+   TQ.f(`They ___ (stop) to look at the views.`,[`stopped`]),
+   TQ.f(`Maggie ___ (get) a taxi to the airport really early this morning.`,[`got`])]}
+ ]},
+ {name:`Vocabulary`, review:`Vocabulary: regular verbs and go, have, get, do`, ex:[
+  {t:`3. Complete the sentences with a verb from the box. Use the past simple.`, ins:`Verbs: <s>answer</s>, cry, decide, finish, rain, travel. Example: Peter answered the phone.`, bank:[`cry`,`decide`,`finish`,`rain`,`travel`], wide:1, ea:`finish → finished، decide → decided، travel → travelled، cry → cried، rain → rained.`, items:[
+   TQ.f(`I ___ reading the book yesterday.`,[`finished`]),
+   TQ.f(`Keiko ___ to stay at home.`,[`decided`]),
+   TQ.f(`We ___ from London to Brussels by train.`,[`travelled|traveled`]),
+   TQ.f(`They ___ at the end of the film.`,[`cried`]),
+   TQ.f(`The weather was awful on our holiday. It ___ every day!`,[`rained`])]},
+  {t:`4. Complete the sentences. Use the correct word or phrase.`, ins:`Example: When do you usually have dinner?`, ea:`get up، do homework، go out، do yoga، Have a nice day.`, items:[
+   TQ.c(`I usually ___ up late at the weekend.`,[`have`,`get`,`go`],1),
+   TQ.c(`Pat didn't do her ___ after school.`,[`homework`,`lunch`,`shower`],0),
+   TQ.c(`We ___ out last night.`,[`did`,`had`,`went`],2),
+   TQ.c(`I love to do ___.`,[`a coffee`,`to bed`,`yoga`],2),
+   TQ.c(`___ a nice day!`,[`Do`,`Have`,`Get`],1)]}
+ ]},
+ {name:`Pronunciation`, review:`Pronunciation: -ed endings`, ex:[
+  {t:`5. Which sound does the -ed ending have?`, ins:`Example: arrived → played /d/`, ea:`-ed تُنطق /ɪd/ بعد t وd (invited, painted)، و/t/ بعد k, s, x, ch (cooked, relaxed)، و/d/ بعد الأصوات الأخرى (lived).`, items:[[`cooked`,1],[`invited`,2],[`lived`,0],[`painted`,2],[`relaxed`,1]].map(r=>TQ.mc(`${r[0]} →`,[`played /d/`,`liked /t/`,`wanted /ɪd/`],r[1]))}
+ ]},
+ {name:`Practical English`, review:`Practical English: directions`, ex:[
+  {t:`6. Look at the map. Complete the two dialogues.`, ins:`${MAP11}Words: next to, straight on, between, on the left, turn right`, ea:`الاتجاهات: Go straight on، turn right، next to (بجانب)، between (بين)، on the left (على اليسار).`, items:(()=>{ const o=[`next to`,`straight on`,`between`,`on the left`,`turn right`]; return [
+   TQ.c(`A: Where's the bookshop, please? B: Er… OK. Go ___`,o,1),
+   TQ.c(`then ___.`,o,4),
+   TQ.c(`It's ___ the gym.`,o,0),
+   TQ.c(`A: Excuse me. Is there a hotel near here? B: Yes. It's ___.`,o,3),
+   TQ.c(`It's ___ the bank and the cinema.`,o,2)]; })()}
+ ]},
+ {name:`Reading`, review:`Reading`, ex:[
+  {t:`1. Read the text. Choose the correct option.`, ins:`<div class="rtext"><b>On This Day in History</b><br>23rd April is an important day in history around the world. Many people know it as the birthday of the famous English writer, William Shakespeare, but this wasn't the only thing in history on 23rd April.<br>William Shakespeare lived from 1564 until he was 52 years old in 1616. He went to school in Stratford-upon-Avon. In 1590 he went to live in London and worked as an actor in a theatre. When he was in London, he started to write plays for the theatre. There are 37 plays and many students around the world know some of them, for example Romeo and Juliet, Hamlet, and Macbeth.<br>On the same day in 1972, thousands of miles away, John Young and Charles Duke walked on the moon. At the time, they were two of only 12 men to do this. The first was Neil Armstrong on 21st July 1969. John Young and Charles Duke were two of the astronauts on Apollo 16.<br>Twenty years after this walk on the moon, on 23rd April, the American fast-food company McDonald's opened its first restaurant in Beijing, China. On that first day, 40,000 people visited this new McDonald's and had something to eat! Today there are more than 2,500 McDonald's restaurants in China.<br>On 23rd April in 2005, Jawed Karim watched the first video on YouTube. Jawed is from Germany, but he went to live in the United States with his family in 1992 when he was 13 years old. He studied computer science at university and started YouTube in 2005 with two friends.</div>Example: William Shakespeare lived from 1564.`, ea:`ارجعي إلى النص وانتبهي للسنوات والأرقام.`, items:[
+   TQ.mc(`There are ___ plays for the theatre by Shakespeare.`,[`27`,`37`,`52`],1),
+   TQ.mc(`Between 1969 and 1972, ___ men walked on the moon.`,[`two`,`three`,`twelve`],2),
+   TQ.mc(`Neil Armstrong was the ___ man to walk on the moon.`,[`first`,`second`,`twelfth`],0),
+   TQ.mc(`Jawed Karim lived in ___ between 1979 and 1992.`,[`China`,`Germany`,`the United States`],1),
+   TQ.mc(`Jawed Karim started YouTube in ___.`,[`1979`,`1992`,`2005`],2)]},
+  {t:`2. Read the text again. Choose True or False.`, ins:`Choose True or False.`, ea:`ارجعي إلى النص وتأكدي من التاريخ والمكان.`, items:[[`William Shakespeare lived until he was 52 years old.`,1],[`He worked as an actor in Stratford-upon-Avon.`,0],[`Romeo and Juliet is a play by Shakespeare.`,1],[`Neil Armstrong walked on the moon on 23rd April.`,0],[`John Young walked on the moon in 1972.`,1],[`McDonald's opened a restaurant in Beijing, China in 1992.`,1],[`2,500 people visited the new McDonald's restaurant in Beijing on the first day.`,0],[`Jawed Karim went to live in Germany in 1992.`,0],[`He studied business at university.`,0],[`Jawed Karim started YouTube with his father.`,0]].map(r=>TQ.tf(r[0],r[1]))}
+ ]},
+ {name:`Writing`, review:`Writing`, ex:[
+  {t:`Answer the questions about an important day that you remember.`, ins:`Write full sentences in the past simple.`, wide:1, items:[[`When was the day?`,`It was in June 2020.`],[`What did you do on that day?`,`I finished school.`],[`Who were you with?`,`I was with my family.`],[`Why was the day important?`,`Because I got my certificate.`],[`How did you feel?`,`I felt very happy.`]].map(r=>TQ.fr(r[0],`sent`,r[1]))}
+ ]},
+ {name:`Listening`, review:`Listening`, ex:[
+  {t:`1. Listen to Luis talking to Ellen about her trip to New York. Choose the correct information.`, mp3:AUD(`ft11-1`), mp3n:`Listening 1`, ins:`Choose the correct option.`, ea:`استمعي لما فعلته Ellen في رحلتها.`, items:[
+   TQ.c(`Ellen is tired because she arrived ___ late last night.`,[`in New York`,`back from New York`],1),
+   TQ.c(`Ellen rented ___ when she was in New York.`,[`a flat`,`a car`],1),
+   TQ.c(`Ellen's friends live ___.`,[`in New York`,`near New York`],1),
+   TQ.c(`Ellen ___ New York.`,[`liked`,`didn't like`],1),
+   TQ.c(`Ellen had a party ___ with her friends.`,[`in the park`,`on the beach`],1)]},
+  {t:`2. Listen to five conversations. Choose True or False.`, mp3:AUD(`ft11-2`), mp3n:`Listening 2`, ins:`Choose True or False.`, ea:`استمعي للأماكن والاتجاهات والطقس.`, items:[[`There's a hotel on the corner of South Road and First Avenue.`,1],[`The weather was nice on Sunday.`,1],[`The man watched a film on TV last night.`,1],[`The woman stayed in the city.`,0],[`The Japanese restaurant is opposite the supermarket.`,0]].map(r=>TQ.tf(r[0],r[1]))}
+ ]},
+ SPEAK([`Ask your partner: Where were you on your birthday last year? Did you get any nice birthday presents? What did you like about the day? Who were you with? How did you feel?`,`Ask your partner about Maya: university, dates, subject, first job.`,`Answer your partner's questions about Jamal Khan: Bristol University, 12 September 2021 – 5 June 2024, History, waiter at a restaurant from September 2024 to March 2025.`])
+]};
+
+const FT12={id:`FT12`,lv:3,cls:`u12`,title:`File Test 12`,ar:`اختبار الوحدة ${ORD[12]}`,sub:`Grammar, vocabulary, pronunciation, reading, writing and listening`,parts:[
+ {name:`Grammar`, review:`Grammar: past simple (irregular verbs)`, ex:[
+  {t:`1. Complete the sentences. Use the correct past simple form of the verb in brackets.`, ins:`Example: Julia left home at seven o'clock yesterday morning. (leave)`, wide:1, ea:`أفعال شاذة: buy → bought، write → wrote، send → sent. النفي: didn't + الفعل في أصله (didn't get, didn't say).`, items:[
+   TQ.f(`Ben ___ a new pair of shoes last week. (buy)`,[`bought`]),
+   TQ.f(`I ___ a long email to Maxine. (write)`,[`wrote`]),
+   TQ.f(`Martina ___ a taxi home last night. (not get)`,[`didn't get|did not get`]),
+   TQ.f(`Sam ___ anything to me. (not say)`,[`didn't say|did not say`]),
+   TQ.f(`Jack ___ his job application to the company yesterday. (send)`,[`sent`])]},
+  {t:`2. Complete the dialogue. Use the correct past tense form of verbs from the box.`, ins:`Verbs: be, buy, go, have, stay, visit`, bank:[`be`,`buy`,`go`,`have`,`stay`,`visit`], wide:1, ea:`go → went، have → had، stay → stayed، visit → visited، buy → bought.`, items:[
+   TQ.f(`Mark: It was fantastic! We (1) ___ to Türkiye.`,[`went`]),
+   TQ.f(`Mark: We (2) ___ a great time.`,[`had`]),
+   TQ.f(`The first week we (3) ___ at a lovely hotel near the beach`,[`stayed`]),
+   TQ.f(`and then we (4) ___ some friends in the south of the country.`,[`visited`]),
+   TQ.f(`Mark: Oh, I (5) ___ you a souvenir. Now, where is it?`,[`bought`])]}
+ ]},
+ {name:`Vocabulary`, review:`Vocabulary: verbs and go, have, get, do`, ex:[
+  {t:`3. Complete the sentences with the correct past tense form of verbs from the box.`, ins:`Verbs: exchange, move, <s>see</s>, sit, tell, wait. Example: We saw the new film at the cinema.`, bank:[`exchange`,`move`,`sit`,`tell`,`wait`], wide:1, ea:`wait → waited، exchange → exchanged، move → moved، tell → told، sit → sat.`, items:[
+   TQ.f(`We ___ for an hour, but she didn't come.`,[`waited`]),
+   TQ.f(`Toni ___ some money at the airport.`,[`exchanged`]),
+   TQ.f(`My sister ___ to Canada last year.`,[`moved`]),
+   TQ.f(`I ___ you not to say that!`,[`told`]),
+   TQ.f(`A famous actor ___ next to me on the train.`,[`sat`])]},
+  {t:`4. Complete the sentences. Use the correct word.`, ins:`Example: We had lunch at a Chinese restaurant yesterday.`, ea:`got a taxi، have breakfast، did housework، checked into a hotel، go home.`, items:[
+   TQ.c(`We ___ a taxi home last night.`,[`did`,`got`,`went`],1),
+   TQ.c(`I didn't have ___ this morning.`,[`breakfast`,`sport`,`up early`],0),
+   TQ.c(`We ___ lots of housework last weekend.`,[`did`,`got`,`went`],0),
+   TQ.c(`We checked ___ the hotel yesterday.`,[`at`,`into`,`onto`],1),
+   TQ.c(`Steve didn't go ___ last night.`,[`home`,`homework`,`housework`],0)]}
+ ]},
+ {name:`Pronunciation`, review:`Pronunciation: word stress and past forms`, ex:[
+  {t:`5. Which is the stressed syllable? Choose 1, 2, or 3.`, ins:`Example: per|fume → 1`, ea:`المقطع المنبور: CON-cert، EVE-ning، CLASS-i-cal، HO-li-day، ex-PEN-sive.`, items:[[`con|cert`,2,0],[`eve|ning`,2,0],[`class|i|cal`,3,0],[`ho|li|day`,3,0],[`ex|pen|sive`,3,1]].map(r=>TQ.mc(`${r[0]} →`,[`1`,`2`,`3`].slice(0,r[1]),r[2]))},
+  {t:`6. Choose the word that has a different sound.`, ins:`Example: painted, rained, wanted → rained`, ea:`waited تنتهي بـ /ɪd/، وwas فيها /ɒ/، وliked تنتهي بـ /t/، وwent فيها /e/، وplayed تنتهي بـ /d/.`, items:[[[`looked`,`stopped`,`waited`],2],[[`bought`,`saw`,`was`],2],[[`hated`,`liked`,`needed`],1],[[`got`,`went`,`was`],1],[[`played`,`cooked`,`watched`],0]].map(r=>TQ.mc(`${r[0].join(`, `)} →`,r[0],r[1]))}
+ ]},
+ {name:`Reading`, review:`Reading`, ex:[
+  {t:`1. Read the blog. Choose True or False.`, ins:`<div class="rtext"><b>A train in the mountains</b><br>Last year, I went on the most fantastic holiday. I went to South America for six weeks! That's a long time to be away from home. I went with my sister, but our parents didn't come with us. It was the first time we were on holiday alone.<br>We visited three countries: Colombia, Ecuador, and Peru. In Colombia, we visited the capital city, Bogotá. I didn't like the city, but my sister loved it. Then in Ecuador, we went to the rainforest and to a market town called Otavalo. I bought some souvenirs there and we ate a delicious meal. In the rainforest, it rained every day. Now I understand why it's called the rainforest.<br>When we left Ecuador, we travelled to Peru. We visited some famous places and stayed in the mountains for three days. We saw the famous Condor – it's a really big bird. Then we went on my favourite part of the journey. We travelled on the train from Lima, the capital city of Peru, up into the Andes mountains to a town called Huancayo.<br>The train journey was amazing. We travelled next to the Rimac River and we went on 58 bridges. There were a lot of small towns and the views from the train were beautiful. As the train travelled up into the mountains, the weather was good – it didn't rain, but it was cold. My sister was happy – she loves taking photos. The people that work on the trains speak English, Spanish, and French, so we didn't have problems.<br>After 12 hours, we arrived in Huancayo, where the train journey finished. We were both very tired, but it was a journey to remember.</div>`, ea:`ارجعي إلى المدونة وتأكدي من كل معلومة.`, items:[[`The writer went on holiday to South America.`,1],[`She went with her parents and her sister.`,0],[`The first country they visited was Colombia.`,1],[`The writer liked Bogotá, but her sister didn't.`,0],[`Her sister bought some clothes in Otavalo.`,0],[`It rained a lot in the rainforest.`,1],[`In Peru the writer saw a big bird called a Condor.`,1],[`They started the train journey in Lima.`,1],[`They had problems on the train because people didn't speak English.`,0],[`At the end of the train journey, they didn't feel tired.`,0]].map(r=>TQ.tf(r[0],r[1]))},
+  {t:`2. Read the blog again. Complete the sentences with the correct number.`, ins:`Example: The writer went on holiday for six weeks.`, wide:1, ea:`ابحثي عن الأرقام في المدونة: three، first، three، 58، 12.`, items:[
+   TQ.f(`The writer visited ___ countries.`,[`three|3`]),
+   TQ.f(`It was the ___ time the writer and her sister were on holiday alone.`,[`first|1st`]),
+   TQ.f(`They stayed in the mountains in Peru for ___ days.`,[`three|3`]),
+   TQ.f(`There were ___ bridges on the train journey.`,[`58|fifty-eight|fifty eight`]),
+   TQ.f(`They were on the train for ___ hours from Lima to Huancayo.`,[`12|twelve`])]}
+ ]},
+ {name:`Writing`, review:`Writing`, ex:[
+  {t:`1. Answer these questions about last weekend.`, ins:`Write full sentences in the past simple.`, wide:1, items:[[`Where did you go on Saturday or Sunday?`,`I went to the park.`],[`Who did you go with?`,`I went with my sister.`],[`What did you do?`,`We had a picnic.`],[`Did you enjoy it?`,`Yes, I did.`],[`Did you feel tired in the evening?`,`Yes, I did.`]].map(r=>TQ.fr(r[0],`sent`,r[1]))},
+  {t:`2. Answer the questions about a film you saw in the past.`, ins:`Write full sentences in the past simple.`, wide:1, items:[[`What was the last film you saw?`,`It was…`],[`What kind of film was it?`,`It was a comedy.`],[`Where did you see it?`,`I saw it at home.`],[`Who did you see it with?`,`I saw it with my family.`],[`Did you enjoy it? Why (not)?`,`Yes, I did. It was funny.`]].map(r=>TQ.fr(r[0],`sent`,r[1]))}
+ ]},
+ {name:`Listening`, review:`Listening`, ex:[
+  {t:`1. Listen to Laura and Francoise talking about their holidays. Choose True or False.`, mp3:AUD(`ft12-1`), mp3n:`Listening 1`, ins:`Choose True or False.`, ea:`استمعي لما فعلته كل واحدة في عطلتها.`, items:[[`Francoise went to France on holiday.`,1],[`Francoise is tired after her holiday.`,0],[`Francoise didn't stay in a hotel.`,1],[`Laura moved to Ireland last year.`,0],[`Francoise bought some gifts for Laura.`,1]].map(r=>TQ.tf(r[0],r[1]))},
+  {t:`2. Listen to five conversations and answer the questions.`, mp3:AUD(`ft12-2`), mp3n:`Listening 2`, ins:`Choose A, B, or C.`, ea:`استمعي للأسباب والأنشطة في الماضي.`, items:[
+   TQ.mc(`What didn't Max do?`,[`Check in.`,`Pack his passport.`,`Book a taxi.`],2),
+   TQ.mc(`Why did Carmen stay at home yesterday?`,[`She was on holiday.`,`She had a lot of work to do.`,`The office was closed.`],1),
+   TQ.mc(`What did Elif do at the weekend?`,[`She read a book.`,`She passed her driving test.`,`She worked.`],0),
+   TQ.mc(`What did the woman like about the holiday?`,[`The coffee.`,`The food.`,`The weather.`],1),
+   TQ.mc(`What kind of film did the woman see last night?`,[`Horror.`,`Comedy.`,`Action.`],2)]}
+ ]},
+ SPEAK([`Ask your partner: Where did you go on your last holiday? Who did you go with? When did you go? How did you travel? How many days or weeks did you stay there?`,`Ask your partner about Anwar's last holiday: where, who with, when, how long, what he did.`,`Answer your partner's questions about Cheryl: Yellowstone National Park in the United States, with two friends (Dina and Amanda), in May, six days, went camping.`])
+]};
+
+const PT2={id:`PT2`,lv:3,cls:`exam`,title:`Progress Test: Units 7–12`,ar:`الاختبار المرحلي للوحدات من السابعة إلى الثانية عشرة`,sub:`Grammar, vocabulary, pronunciation, practical English, reading, writing and listening`,parts:[
+ {name:`Grammar`, review:`Grammar: Units 7–12`, ex:[
+  {t:`1. Choose A, B, or C to complete the sentences.`, ins:`Example: Tania went to the park yesterday.`, ea:`راجعي: المضارع المستمر، وwas / were، والماضي البسيط، وlike + ing، وcan / can't، وترتيب السؤال.`, items:[
+   TQ.mc(`What are you ___ at the moment?`,[`do`,`doing`,`did`],1),
+   TQ.mc(`___ your parents at the concert last night?`,[`Was`,`Wasn't`,`Were`],2),
+   TQ.mc(`Khalid is in the kitchen ___ dinner.`,[`makes`,`make`,`making`],2),
+   TQ.mc(`What ___ yesterday?`,[`Lucy was doing`,`did Lucy do`,`Lucy did do`],1),
+   TQ.mc(`Rana always ___ computer games at home in the evening.`,[`play`,`plays`,`is playing`],1),
+   TQ.mc(`My father hates ___ in the city.`,[`drive`,`I drive`,`driving`],2),
+   TQ.mc(`I'm sorry, but you ___ park here.`,[`aren't`,`can`,`can't`],2),
+   TQ.mc(`Jonas is a police officer in Munich, but ___ in Frankfurt today.`,[`he works`,`he working`,`he's working`],2),
+   TQ.mc(`A: ___ their friends at the weekend? B: Yes, they did.`,[`They visited`,`Did they visited`,`Did they visit`],2),
+   TQ.mc(`___ in and sit down, please.`,[`Come`,`Listen`,`Walk`],0),
+   TQ.mc(`Katarina loves ___ Mexican food.`,[`eat`,`eats`,`eating`],2),
+   TQ.mc(`A: Let's meet at 8 o'clock. B: I'm sorry, I ___. I'm busy at 8 o'clock.`,[`aren't`,`can't`,`don't`],1),
+   TQ.mc(`When Sonia went on holiday, she ___ in a hotel.`,[`didn't stay`,`didn't stayed`,`not staying`],0),
+   TQ.mc(`Do you like ___?`,[`swim`,`swiming`,`swimming`],2),
+   TQ.mc(`A: What did you buy at the bookshop? B: I ___ some magazines and a present for my mother.`,[`buying`,`buyed`,`bought`],2)]},
+  {t:`2. Put the words in the correct order to make questions.`, ins:`Example: like watching you do TV ? → Do you like watching TV?`, wide:1, ea:`ترتيب السؤال: (كلمة السؤال) + do / does / did / is / are + الفاعل + الفعل + الباقي.`, items:[
+   TQ.f(`out you on go Saturday do night ?\n___`,[`Do you go out on Saturday night?`]),
+   TQ.f(`you do at relax weekend how the ?\n___`,[`How do you relax at the weekend?`]),
+   TQ.f(`working you where today are ?\n___`,[`Where are you working today?`]),
+   TQ.f(`does office the Jamal how usually to travel ?\n___`,[`How does Jamal usually travel to the office?`]),
+   TQ.f(`he teacher is the listening to ?\n___`,[`Is he listening to the teacher?`]),
+   TQ.f(`they on where holiday did year go last ?\n___`,[`Where did they go on holiday last year?`]),
+   TQ.f(`the you doing do in yoga like morning ?\n___`,[`Do you like doing yoga in the morning?`]),
+   TQ.f(`did you live and USA when in your family the ?\n___`,[`When did you and your family live in the USA?`])]},
+  {t:`3. Complete the sentences with one word.`, ins:`Example: Did you speak to Flo this morning? No, I didn't speak to her this morning.`, wide:1, ea:`Is there للمفرد، وany في النفي، وsome في الإثبات، وضمائر المفعول: it, them, us.`, items:[
+   TQ.f(`___ there a shower in the bathroom?`,[`Is`]),
+   TQ.f(`There aren't ___ plates in the cupboard.`,[`any|many`]),
+   TQ.f(`A: Do you want to see the new Stephen King horror film? B: Yes, I'd love to go and watch ___.`,[`it`]),
+   TQ.f(`There are ___ great views of the mountains from here.`,[`some|a lot of`]),
+   TQ.f(`My parents moved to Türkiye last year, so I don't see ___ very often.`,[`them`]),
+   TQ.f(`A: Are there any chairs in the garden? B: No, there ___.`,[`aren't|are not`]),
+   TQ.f(`A: Excuse me. Can you take a photo of ___? B: Of course! Stand together.`,[`us`])]}
+ ]},
+ {name:`Vocabulary`, review:`Vocabulary: Units 7–12`, ex:[
+  {t:`1. Choose the correct word A, B, or C.`, ins:`Example: My parents hate eating out.`, ea:`راجعي حروف الجر (at home, in London, on the plane, under the umbrella)، والاتجاهات (opposite, between, on the corner)، والأفعال (buy, have, arrive, visit, do, wait).`, items:[
+   TQ.mc(`A strange woman sat down ___ me on the bus.`,[`on the left`,`between`,`opposite`],2),
+   TQ.mc(`Darius loves ___ new clothes.`,[`buying`,`paying`,`shopping`],0),
+   TQ.mc(`Are there any ___ in the bathroom?`,[`pillows`,`towels`,`showers`],1),
+   TQ.mc(`Would you like to ___ dinner tonight?`,[`do`,`go`,`have`],2),
+   TQ.mc(`A: Where were you at 7 o'clock last night? B: I was ___ home with my wife.`,[`at`,`in`,`on`],0),
+   TQ.mc(`Manuela and her boyfriend are ___ in the mountains.`,[`camping`,`doing`,`going out`],0),
+   TQ.mc(`What time did you ___ at the hotel?`,[`arrive`,`leave`,`stay`],0),
+   TQ.mc(`The bookshop is ___ the bank and the supermarket.`,[`on the left`,`between`,`next`],1),
+   TQ.mc(`Louis and Elisa were ___ London last week.`,[`at`,`in`,`on`],1),
+   TQ.mc(`We really like ___ different countries.`,[`doing`,`travelling`,`visiting`],2),
+   TQ.mc(`It's raining. Come and stand ___ the umbrella.`,[`on`,`in`,`under`],2),
+   TQ.mc(`When do you usually ___ your homework?`,[`do`,`go`,`make`],0),
+   TQ.mc(`It was a long flight. We were ___ the plane for 9 hours.`,[`at`,`in`,`on`],2),
+   TQ.mc(`There's a nice Italian restaurant ___ of 5th Avenue.`,[`next to`,`opposite`,`on the corner`],2),
+   TQ.mc(`A: What are you doing here? B: I'm ___ for Beatriz. She's late!`,[`arriving`,`leaving`,`waiting`],2)]},
+  {t:`2. Complete the sentences. Write one word in each gap.`, ins:`Example: You can't take photos here.`, wide:1, ea:`اكتبي الكلمة كاملة؛ أول حرف أو حرفين معطيان.`, items:[
+   TQ.f(`I like action films, but I prefer w___.`,[`westerns|esterns`]),
+   TQ.f(`Raul usually goes sw___ in the pool every morning.`,[`swimming|imming`]),
+   TQ.f(`I like watching TV s___ in my free time.`,[`series|eries`]),
+   TQ.f(`Johanna loves going for a w___ in the mountains.`,[`walk|alk`]),
+   TQ.f(`Star Wars isn't a horror film! It's a sc___ f___ film.`,[`science|ience`,`fiction|iction`]),
+   TQ.f(`Would you like to go to the c___ this weekend? There's a new action film I want to see.`,[`cinema|inema`]),
+   TQ.f(`It's cold today. Please wear your c___.`,[`coat|oat`]),
+   TQ.f(`My father always wears a s___ and a shirt and tie in the office.`,[`suit|uit`]),
+   TQ.f(`Emily is wearing a long red sk___.`,[`skirt|irt`]),
+   TQ.f(`When I do sport, I always wear shorts, a T-shirt, and tr___.`,[`trainers|ainers`]),
+   TQ.f(`Our suitcases are heavy and our room is on the fifth floor. Is there a l___?`,[`lift|ift`]),
+   TQ.f(`We bought some souvenirs in the hotel g___ shop.`,[`gift|ift`]),
+   TQ.f(`A lot of people st___ in a hotel when they go on holiday.`,[`stay|ay`]),
+   TQ.f(`You usually go to R___ to check in when you arrive at a hotel.`,[`Reception|eception`]),
+   TQ.f(`Let's b___ our tickets online.`,[`buy|uy`])]},
+  {t:`3. Match the words / phrases with the correct verb.`, ins:`Verbs: <s>eat</s>, carry, cook, have, walk, play, do, meet, phone, use, go, wait (one extra verb). Example: eat fast food`, ea:`do housework، meet friends، wait for a flight، use your phone، play the piano، have a nice day، walk in the park، cook dinner، go out، carry a suitcase.`, items:(()=>{ const o=[`carry`,`cook`,`have`,`walk`,`play`,`do`,`meet`,`phone`,`use`,`go`,`wait`]; return [[`housework`,`do`],[`friends after work`,`meet`],[`for a flight`,`wait`],[`your mobile phone`,`use`],[`the piano`,`play`],[`a nice day`,`have`],[`in the park`,`walk`],[`dinner`,`cook`],[`out`,`go`],[`a suitcase`,`carry`]].map(r=>TQ.c(`___ ${r[0]}`,o,PICK(o,r[1]))); })()}
+ ]},
+ {name:`Pronunciation`, review:`Pronunciation: Units 7–12`, ex:[
+  {t:`1. Choose the word that has a different sound.`, ins:`Example: here, near, wear → wear`, ea:`انتبهي للأصوات: dress /e/، town /aʊ/، why /w/، here /ɪə/، father /ɑː/، can /æ/، soon /uː/، fun /ʌ/، booked /t/، packed /t/.`, items:[[[`serve`,`work`,`dress`],2],[[`know`,`town`,`coat`],1],[[`why`,`who`,`husband`],0],[[`there`,`here`,`airport`],1],[[`about`,`father`,`actor`],1],[[`car`,`can`,`can't`],1],[[`book`,`good`,`soon`],2],[[`fun`,`cooking`,`think`],0],[[`rented`,`booked`,`decided`],1],[[`packed`,`travelled`,`stayed`],0]].map(r=>TQ.mc(`${r[0].join(`, `)} →`,r[0],r[1]))},
+  {t:`2. Which is the stressed syllable? Choose 1, 2, 3, or 4.`, ins:`Example: re|lax → 2`, ea:`المقطع المنبور: re-CEP-tion، TROU-sers، OPP-os-ite، oc-TO-ber، SE-venth، pi-AN-o، SUIT-case، an-i-MA-tions، e-LE-venth، AP-ril.`, items:[[`Re|cep|tion`,3,1],[`trou|sers`,2,0],[`opp|os|ite`,3,0],[`Oc|to|ber`,3,1],[`se|venth`,2,0],[`pi|an|o`,3,1],[`suit|case`,2,0],[`an|i|ma|tions`,4,2],[`el|e|venth`,3,1],[`Ap|ril`,2,0]].map(r=>TQ.mc(`${r[0]} →`,[`1`,`2`,`3`,`4`].slice(0,r[1]),r[2]))}
+ ]},
+ {name:`Practical English`, review:`Practical English: Units 7–12`, ex:[
+  {t:`1. Match the questions and sentences with the answers.`, ins:`Example: When is Thanksgiving? → It's in November.`, ea:`اختاري الرد المنطقي لكل جملة.`, items:(()=>{ const o=[`Yes, definitely.`,`You're welcome.`,`Sorry, I can't. I'm busy on Friday.`,`No, thanks. I'm not hungry at the moment.`,`OK. See you there at 7:30.`,`It's the fifth of July.`,`Yes, there's one on the corner of Park Street and King's Road.`,`Yes, I'd love to. There's a really good comedy film on at the moment.`,`Go straight on and then turn right. It's on the right opposite the school.`,`Great. Talk to you then.`]; return [[`What's the date today?`,5],[`Would you like a burger?`,3],[`Excuse me. Is there a bank near here?`,6],[`Thank you very much.`,1],[`Are you sure? Isn't it the ninth?`,0],[`Would you like to come to the cinema with me?`,7],[`Sorry, where is that?`,8],[`Let's meet outside the theatre.`,4],[`Talk to you on Monday.`,9],[`Would you like to go out on Friday night?`,2]].map(r=>TQ.mc(`${r[0]} →`,o,r[1])); })()}
+ ]},
+ {name:`Reading`, review:`Reading`, ex:[
+  {t:`1. Read the email and choose True or False.`, ins:`<div class="rtext"><b>To:</b> Jemma · <b>From:</b> Monica · <b>Subject:</b> Holiday time<br>Hi Jemma, I hope you're OK. We're having a wonderful time here in Mexico. Last week, we were in Mexico City. It's a really amazing city and there is a lot to do there. We didn't stay in a hotel because Mike has a friend, Jorge, who lives there. He lives in a big house outside the city. We stayed with him and his family. He is married, and he has three children and two dogs. It was great fun. Marisol, Jorge's wife, loves cooking. She cooked dinner for us on the first night and it was fantastic.<br>When we were in Mexico City, we travelled by bus. It was very cheap and easy to use them. We visited a lot of interesting places, but my favourite was the Frida Kahlo Museum. She was a famous artist and you can see a lot of her paintings in the museum. I loved it.<br>Yesterday, we left Mexico City and got a plane to Acapulco. Here we're staying in a small hotel. It's lovely. There's a balcony and we have fantastic views. The hotel is near a beautiful beach. Mike rented a car, so we can visit different places. Last night, after we checked into the hotel, we walked down to the beach and had dinner at a nice restaurant. I really like eating Mexican food.<br>At the moment, Mike is swimming in the hotel's swimming pool. I'm sitting in our room watching TV and writing emails. I'm sending you some photos of the holiday. In the first one, you can see us arriving at Jorge's house in Mexico City. The second photo is me dancing last night! And the third photo is Mike relaxing next to the swimming pool this morning.<br>I'm missing you all. Love, Monica</div>`, ea:`ارجعي إلى الرسالة وفرّقي بين ما حدث في الماضي وما يحدث الآن.`, items:[[`Monica is in Mexico on business.`,0],[`Last week, Monica and Mike were in Mexico City.`,1],[`Jorge lives in Mexico City.`,1],[`Marisol cooked a fantastic meal on the first night.`,1],[`When they were in Mexico City, Monica and Mike travelled by taxi.`,0],[`Monica really liked the Frida Kahlo Museum.`,1],[`Yesterday, they went by plane to Acapulco.`,1],[`They are staying in a hotel near to the beach.`,1],[`Last night, they had a meal in the hotel.`,0],[`At the moment, Monica is relaxing next to the swimming pool.`,0]].map(r=>TQ.tf(r[0],r[1]))},
+  {t:`2. Read the email again and complete the sentences with one word from the text.`, ins:`Example: Jorge is Mike's friend.`, wide:1, ea:`ابحثي في الرسالة عن الكلمة المطلوبة.`, items:[
+   TQ.f(`Jorge is married and has two dogs and three ___.`,[`children`]),
+   TQ.f(`It was ___ and easy to use the buses in Mexico City.`,[`cheap`]),
+   TQ.f(`Monica and Mike have ___ views from their hotel room.`,[`fantastic`]),
+   TQ.f(`Monica likes eating ___ food.`,[`Mexican`]),
+   TQ.f(`Monica is sending Jemma three ___.`,[`photos`])]}
+ ]},
+ {name:`Writing`, review:`Writing`, ex:[
+  {t:`Answer the questions and write about your last holiday.`, ins:`• Where did you go? • When was it? • Who did you go with? • How did you travel there? • What did you do on the holiday?`, items:[TQ.ta(`Write about your last holiday:`,`Last summer I went to Latakia with my family. We travelled by car…`)]}
+ ]},
+ {name:`Listening`, review:`Listening`, ex:[
+  {t:`1. Listen to Demi and Rick talking. Choose A, B, or C.`, mp3:AUD(`pt712-1`), mp3n:`Listening 1`, ins:`Choose A, B, or C.`, ea:`استمعي لأنواع الأفلام ومن يحب كل نوع.`, items:[
+   TQ.mc(`Where was Rick last night?`,[`He stayed at home.`,`He went to a restaurant.`,`He went to the cinema.`],2),
+   TQ.mc(`What film did Rick want to see?`,[`a comedy`,`a science-fiction`,`a western`],0),
+   TQ.mc(`Who hates westerns?`,[`Demi`,`Marjorie`,`Rick`],1),
+   TQ.mc(`What film did Rick and his girlfriend see?`,[`a comedy`,`a science-fiction`,`a western`],1),
+   TQ.mc(`Who directed the science fiction film that Rick saw?`,[`Steven Spielberg`,`Meryl Streep`,`Tom Hanks`],0)]},
+  {t:`2. Listen to five conversations and answer the questions.`, mp3:AUD(`pt712-2`), mp3n:`Listening 2`, ins:`Choose A, B, or C.`, ea:`استمعي للتواريخ والملابس والاتجاهات.`, items:[
+   TQ.mc(`When is Jenni's dad's birthday?`,[`13th November`,`14th November`,`16th November`],2),
+   TQ.mc(`What does Matteo enjoy doing?`,[`running, cycling and camping`,`cycling, running and yoga`,`camping, cycling and yoga`],2),
+   TQ.mc(`What is Grace wearing?`,[`a red dress and red shoes`,`a red dress and black shoes`,`jeans and a blue sweater`],1),
+   TQ.mc(`Where's the car park?`,[`on the corner of North Street`,`on the left next to the train station`,`on the right next to the train station`],1),
+   TQ.mc(`What did Angus think of the Chinese food?`,[`He didn't like it.`,`It wasn't expensive.`,`He always enjoys eating Chinese food.`],0)]}
+ ]},
+ SPEAK([`Ask your partner: What do you love / hate doing? Why? How do you relax at the weekend? What was the last film you saw? What kind of film was it? Who did you watch the film with? What did you think of it?`,`Answer your partner's questions.`,`Ask your partner about Tomas's past activities (this morning, last night, last weekend).`,`Answer your partner's questions about Sonia: this morning – read the newspaper, walked to university; last night – studied English; last weekend – went walking in the mountains, cooked dinner for mum and dad.`])
+]};
+
+const END={id:`END`,lv:0,cls:`exam`,title:`End of course test`,ar:`الاختبار النهائي`,sub:`All units: grammar, vocabulary, pronunciation, practical English, reading, writing and listening`,parts:[
+ {name:`Grammar`, review:`Grammar: all units`, ex:[
+  {t:`1. Choose A, B, or C to complete the sentences.`, ins:`Example: Where is Jasmine from?`, ea:`راجعي: be، do / does، this / these، صفات الملكية، ترتيب الصفة، ظروف التكرار، ضمائر المفعول، can't، ing، some / any، الماضي البسيط.`, items:[
+   TQ.mc(`A: Hello. Are you Michael? B: No, I ___.`,[`'m not`,`isn't`,`not`],0),
+   TQ.mc(`A: What nationality are Veronique and Lysiane? B: They ___.`,[`'re France`,`French`,`'re French`],2),
+   TQ.mc(`___ you speak Spanish?`,[`Are`,`Do`,`Does`],1),
+   TQ.mc(`Are ___ your sunglasses?`,[`this`,`that`,`these`],2),
+   TQ.mc(`A: What's your mother's name? B: ___ name's Isabella.`,[`Her`,`Our`,`She's`],0),
+   TQ.mc(`This is ___.`,[`a tablet expensive`,`a expensive tablet`,`an expensive tablet`],2),
+   TQ.mc(`Does your father ___ in an office?`,[`work`,`works`,`working`],0),
+   TQ.mc(`___ late on Friday night.`,[`Go out we never`,`Never we go out`,`We never go out`],2),
+   TQ.mc(`Where's Luca? I need to talk to ___.`,[`he`,`him`,`his`],1),
+   TQ.mc(`I'm sorry. You ___ use your mobile phone here.`,[`aren't`,`can't`,`don't`],1),
+   TQ.mc(`I really hate ___ for clothes.`,[`shop`,`shoping`,`shopping`],2),
+   TQ.mc(`A: Hi. What's Emily doing at the moment? B: She's in her bedroom ___ music.`,[`listen to`,`listening to`,`listens to`],1),
+   TQ.mc(`Are there ___ pillows on the bed?`,[`a`,`any`,`some`],1),
+   TQ.mc(`Where ___ on holiday last year?`,[`did you go`,`you did go`,`did you went`],0),
+   TQ.mc(`I ___ an amazing football match last night.`,[`see`,`seed`,`saw`],2)]},
+  {t:`2. Complete the text with the correct form of the verb in brackets. Use the present simple or the past simple.`, ins:`<div class="rtext">Antonia Bianchi is Italian. She lives (live) in a small flat in the centre of Milan. She (1) ___ (not be) married, but she (2) ___ (have) a boyfriend. His name is Marco and he (3) ___ (work) in a factory. Antonia lives with her friend Melanie. Melanie (4) ___ (move) to Milan in 2020. Before then, she (5) ___ (be) a student and she (6) ___ (study) in the USA. When she (7) ___ (finish) university, she (8) ___ (not get) a job. She (9) ___ (go) to Australia and (10) ___ (travel) around the country for a year.</div>`, wide:1, ea:`الحاضر البسيط للحاضر (isn't, has, works)، والماضي البسيط لما حدث قبل 2020 (moved, was, studied, finished, didn't get, went, travelled).`, items:[
+   TQ.f(`She (1) ___ (not be) married`,[`isn't|is not|'s not`]),
+   TQ.f(`but she (2) ___ (have) a boyfriend.`,[`has`]),
+   TQ.f(`he (3) ___ (work) in a factory.`,[`works`]),
+   TQ.f(`Melanie (4) ___ (move) to Milan in 2020.`,[`moved`]),
+   TQ.f(`Before then, she (5) ___ (be) a student`,[`was`]),
+   TQ.f(`and she (6) ___ (study) in the USA.`,[`studied`]),
+   TQ.f(`When she (7) ___ (finish) university,`,[`finished`]),
+   TQ.f(`she (8) ___ (not get) a job.`,[`didn't get|did not get`]),
+   TQ.f(`She (9) ___ (go) to Australia`,[`went`]),
+   TQ.f(`and (10) ___ (travel) around the country for a year.`,[`travelled|traveled`])]},
+  {t:`3. Put the words in the correct order to make sentences or questions.`, ins:`Example: usually to you time bed go what do ? → What time do you usually go to bed?`, wide:1, ea:`ترتيب الجملة والسؤال؛ ظرف التكرار قبل الفعل الرئيسي، والصفات قبل الاسم.`, items:[
+   TQ.f(`up weekend at do get when the you ?\n___`,[`When do you get up at the weekend?`]),
+   TQ.f(`wearing Tina a red is dress beautiful .\n___`,[`Tina is wearing a beautiful red dress.`]),
+   TQ.f(`Samantha housework always Saturday does on the .\n___`,[`Samantha always does the housework on Saturday.`]),
+   TQ.f(`there a restaurant is here Japanese near ?\n___`,[`Is there a Japanese restaurant near here?`]),
+   TQ.f(`you did do night what last ?\n___`,[`What did you do last night?`])]}
+ ]},
+ {name:`Vocabulary`, review:`Vocabulary: all units`, ex:[
+  {t:`4. Complete the sentences. Write one word in each gap.`, ins:`Example: Pedro is a waiter. He works in a Spanish restaurant.`, wide:1, ea:`اكتبي الكلمة كاملة؛ أول حرف أو حرفين معطيان.`, items:[
+   TQ.f(`My sister has two children. A son and a d___.`,[`daughter|aughter`]),
+   TQ.f(`Yvonne is married. Her h___ is Brazilian.`,[`husband|usband`]),
+   TQ.f(`I always have milk and sugar in my c___.`,[`coffee|offee`]),
+   TQ.f(`In Japan, you can eat a lot of r___ and noodles.`,[`rice|ice`]),
+   TQ.f(`What time do you usually have br___ in the morning?`,[`breakfast|eakfast`]),
+   TQ.f(`Danielle st___ economics at university.`,[`studies|udies`]),
+   TQ.f(`Would you like to pl___ tennis this Saturday?`,[`play|ay`]),
+   TQ.f(`How much is this mug? I want to b___ a present for my brother.`,[`buy|uy`]),
+   TQ.f(`When it's cold, I usually wear a coat or j___.`,[`jacket|acket`]),
+   TQ.f(`I wear a suit, a tie and a sh___ at work every day.`,[`shirt|irt`])]},
+  {t:`5. Choose A, B, or C to complete the sentences.`, ins:`Example: What time did you go to the cinema?`, ea:`راجعي المفردات: thirsty، umbrella، retired، slow، colour، juice، drinks، leave، getting a taxi، shower، camping، phone، in her car، pool، sent.`, items:[
+   TQ.mc(`I'm very ___. I need some water.`,[`hungry`,`thirsty`,`tired`],1),
+   TQ.mc(`When it rains, you need ___.`,[`a camera`,`an ID card`,`an umbrella`],2),
+   TQ.mc(`Hiro is 75 years old. He doesn't work now. He's ___.`,[`at home`,`a factory worker`,`retired`],2),
+   TQ.mc(`A: Is your new car fast? B: No, it isn't. It's very ___.`,[`big`,`dirty`,`slow`],2),
+   TQ.mc(`What ___ is her dress?`,[`clean`,`colour`,`green`],1),
+   TQ.mc(`Would you like some orange ___?`,[`beer`,`juice`,`milk`],1),
+   TQ.mc(`My daughter ___ tea in the morning.`,[`does`,`drinks`,`eats`],1),
+   TQ.mc(`What time did you ___ the house this morning?`,[`arrive`,`go`,`leave`],2),
+   TQ.mc(`I'm not ___ a taxi. It's very expensive!`,[`getting`,`staying`,`waiting`],0),
+   TQ.mc(`Emanuel always has a ___ in the morning.`,[`breakfast`,`gym`,`shower`],2),
+   TQ.mc(`We sometimes go ___ for our holidays.`,[`camping`,`flying`,`staying`],0),
+   TQ.mc(`I miss my family, so I ___ home a lot.`,[`wait`,`phone`,`work`],1),
+   TQ.mc(`Yesterday at 3 p.m., Sandra was ___ her car.`,[`at`,`in`,`on`],1),
+   TQ.mc(`Does the hotel have a swimming ___?`,[`gym`,`lift`,`pool`],2),
+   TQ.mc(`Ben ___ his girlfriend some chocolates.`,[`decided`,`had`,`sent`],2)]},
+  {t:`6. Write the missing word.`, ins:`Example: one – first, two – second`, wide:1, ea:`فكّري في العلاقة بين الكلمتين الأوليين (جمع، جنسية، ضد، مكان عمل، الشهر التالي…) وطبّقيها على الثانية.`, items:[[`man – men, person –`,`people`],[`Poland – Polish, Brazil –`,`Brazilian`],[`big – small, beautiful –`,`ugly`],[`teacher – school, nurse –`,`hospital`],[`September – October, November –`,`December`],[`pack – suitcase, book –`,`tickets|ticket`],[`Monday – Tuesday, Wednesday –`,`Thursday`],[`cheap – expensive, easy –`,`difficult`],[`three – third, four –`,`fourth`],[`TV – watch, radio –`,`listen to`],[`car – park, gift –`,`shop`],[`great – fantastic, terrible –`,`awful`],[`brother – sister, husband –`,`wife`],[`buy – presents, rent –`,`a car|car`],[`football – scarf, key –`,`ring`]].map(r=>TQ.f(`${r[0]} ___`,[r[1]]))}
+ ]},
+ {name:`Pronunciation`, review:`Pronunciation: all units`, ex:[
+  {t:`7. Which is the stressed syllable? Choose 1, 2, 3, 4, or 5.`, ins:`Example: cam|era → 1`, ea:`المقطع المنبور: CUP-board، Bra-ZIL-i-an، TRA-vel-ling، u-ni-VER-si-ty، U-sual-ly، De-CEM-ber، THIR-ti-eth، af-ter-NOON، CE-re-al، CO-me-dy.`, items:[[`cup|board`,2,0],[`Bra|zil|i|an`,4,1],[`tra|vel|ling`,3,0],[`u|ni|ver|si|ty`,5,2],[`u|sual|ly`,3,0],[`De|cem|ber`,3,1],[`thir|ti|eth`,3,0],[`af|ter|noon`,3,2],[`ce|re|al`,3,0],[`co|me|dy`,3,0]].map(r=>TQ.mc(`${r[0]} →`,[`1`,`2`,`3`,`4`,`5`].slice(0,r[1]),r[2]))},
+  {t:`8. Match the words with the same sounds. Choose two words for each.`, ins:`Words: <s>how</s>, eight, coffee, four, blue, watch, you, draw, there, great, <s>town</s>, wear. Example: out → town, how`, ea:`/eɪ/ name, eight, great؛ /eə/ airport, there, wear؛ /ɒ/ stop, coffee, watch؛ /ɔː/ horse, four, draw؛ /uː/ too, blue, you.`, items:(()=>{ const o=[`eight`,`coffee`,`four`,`blue`,`watch`,`you`,`draw`,`there`,`great`,`wear`]; return [[`name`,`eight`,`great`],[`airport`,`there`,`wear`],[`stop`,`coffee`,`watch`],[`horse`,`four`,`draw`],[`too`,`blue`,`you`]].map(r=>({p:[`${r[0]} → `,{sel:r[1],o},` `,{sel:r[2],o}],combos:[[r[1],r[2]],[r[2],r[1]]],ans:`${r[1]}, ${r[2]}`})); })()}
+ ]},
+ {name:`Practical English`, review:`Practical English: all units`, ex:[
+  {t:`9. Match the questions with the answers.`, ins:`Example: How do you spell your surname? → It's L-O-P-E-Z.`, ea:`اختاري الرد المنطقي لكل سؤال.`, items:(()=>{ const o=[`Yes. I'd love to.`,`I have a reservation for eight o'clock.`,`That's OK. Please sit down.`,`Yes, there's one on King's Road next to the hotel.`,`It's a quarter past nine.`,`Sorry, I'm not sure. I don't live near here.`,`Ice and lemon?`,`It's on the sixteenth of March.`,`No, thanks. I'm not very hungry.`,`That's £6.75, please.`]; return [[`How can I help you?`,1],[`Can I have a Coke, please?`,6],[`How much is it?`,9],[`Excuse me. What time is it?`,4],[`Sorry I'm late.`,2],[`When's Steffi's birthday?`,7],[`Would you like a pizza?`,8],[`Is there a phone shop near here?`,3],[`Would you like to go to the cinema tonight?`,0],[`Excuse me. Where's the station?`,5]].map(r=>TQ.mc(`${r[0]} →`,o,r[1])); })()}
+ ]},
+ {name:`Reading`, review:`Reading`, ex:[
+  {t:`1. Read the text. Complete the sentences with one word from the text.`, ins:`<div class="rtext"><b>A competition application</b><br>Win a holiday for two people for a month in the USA. Spend a week in New York and then drive across the country from east to west. For their application for the competition, we want people to write about their lives for a magazine article about 'Typical lives'.<br><br>My name is Melisa Adem and I'm 19 years old. I'm Turkish and I'm from Izmir. Izmir is a beautiful old city and is famous for its history. I live in a big house with my parents and I study at the university. At the moment, I am studying English. When I finish, I want to be a teacher – I love helping children.<br>From Monday to Friday, I get up at 7:30, have a shower and breakfast, and then leave for university. I usually go by bus and it takes thirty minutes to get from my house to the university. On the bus, I like reading or talking to my friends. At the weekend, I get up late, and I usually help my father in his shop in the afternoon – he sells souvenirs.<br>In my free time, I like going to the beach or taking my dog for a walk. I also love travelling. Last summer, I went on holiday with my boyfriend. We spent three weeks in July travelling around France and Italy. I can speak Italian, but I can't speak French. The holiday was fantastic. We didn't have a lot of money, so we decided to go camping.<br><br>I'm Josh Taylor and I'm 32 years old. I'm from the UK. I'm English, but my parents are American. They live in Manchester, but I don't live with them. I live in a small flat in the centre of Leeds. It's a city in the centre of England. I work in a factory. I hate my job, but the money is good.<br>I left school when I was 16 and travelled around the world for a year. I visited a lot of different countries. My favourite country was Japan. I had an amazing time there. I really liked the food. They eat a lot of fish and vegetables.<br>In my free time, I like playing football and going out with my friends. During the week, I get up at five thirty in the morning and leave my flat at a quarter to seven. When the weather is good, I cycle to work, but when it's cold I go by bus. I'm always tired in the morning because I go to bed late. I like playing computer games in the evening. It's a good way to relax.</div>Example: Melisa is studying English at university.`, wide:1, ea:`ابحثي في النص عن الكلمة المطلوبة.`, items:[
+   TQ.f(`Melisa wants to be a ___ after university.`,[`teacher`]),
+   TQ.f(`Melisa's father sells ___ in his shop.`,[`souvenirs`]),
+   TQ.f(`Melisa went on holiday to France and Italy with her ___.`,[`boyfriend`]),
+   TQ.f(`Josh works in a ___.`,[`factory`]),
+   TQ.f(`Josh was ___ when he left school.`,[`16|sixteen`])]},
+  {t:`2. Read the text again and choose True or False.`, ins:`Choose True or False.`, ea:`ارجعي إلى النص وتأكدي من كل معلومة.`, items:[[`Melisa lives with her parents in Izmir.`,1],[`Melisa works at a university.`,0],[`It takes Melisa thirty minutes to get to the university in the morning.`,1],[`She gets up at 7:30 at the weekend.`,0],[`Melisa speaks French and Italian.`,0],[`Josh's parents are American.`,1],[`Josh lives with his family in Leeds.`,0],[`When Josh visited Japan, he didn't enjoy it.`,0],[`Josh leaves his flat at a quarter to seven in the morning.`,1],[`Josh always cycles to work.`,0]].map(r=>TQ.tf(r[0],r[1]))}
+ ]},
+ {name:`Writing`, review:`Writing`, ex:[
+  {t:`Write your application for the competition.`, ins:`Include: where you live / are from, who you live with, your daily routine, where you work / study, what you like doing in your free time, what you did in the past (e.g. a holiday).`, items:[TQ.ta(`Your application:`,`My name is… I'm from Damascus. I live with my family. Every day I get up at 7.00…`)]}
+ ]},
+ {name:`Listening`, review:`Listening`, ex:[
+  {t:`1. Listen to the phone conversation between Toby and his mother. Choose A, B, or C.`, mp3:AUD(`end-1`), mp3n:`Listening 1`, ins:`Choose A, B, or C.`, ea:`استمعي للمكان والوقت والطعام.`, items:[
+   TQ.mc(`At the moment, Toby is in ___.`,[`France`,`Italy`,`Switzerland`],1),
+   TQ.mc(`He arrived ___.`,[`last night`,`last Saturday`,`this morning`],0),
+   TQ.mc(`For breakfast, Yasmin had ___.`,[`cheese and bread`,`a lot of coffee`,`fruit and yoghurt`],2),
+   TQ.mc(`When they were in Switzerland, ___.`,[`they walked every morning`,`Yasmin went to the swimming pool every morning`,`it wasn't cold`],1),
+   TQ.mc(`Toby ___ a sweater.`,[`bought`,`packed`,`didn't pack`],2)]},
+  {t:`2. Listen to five conversations. Choose A, B, or C.`, mp3:AUD(`end-2`), mp3n:`Listening 2`, ins:`Choose A, B, or C.`, ea:`استمعي للتهجئة والأسعار والاتجاهات والوقت.`, items:[
+   TQ.mc(`How does the man spell his name?`,[`Marc Dupont`,`Mark Dupont`,`Marc Lapont`],0),
+   TQ.mc(`How much does the woman spend?`,[`£15`,`£17.50`,`£23`],2),
+   TQ.mc(`What does the woman do on Sundays when the weather is bad?`,[`She goes for a walk in the mountains.`,`She goes to the gym.`,`She goes to work.`],1),
+   TQ.mc(`Where is the museum?`,[`next to the car park`,`between the supermarket and the hospital`,`opposite the supermarket`],2),
+   TQ.mc(`What time is it now?`,[`8:15`,`8:20`,`8:30`],1)]}
+ ]},
+ SPEAK([`Ask your partner questions and complete their profile: name, nationality, family, birthday, favourite food, breakfast this morning, usual lunch or dinner, free time, kinds of films, last weekend.`,`Now answer your partner's questions.`])
+]};
+
+const TESTS=[FT1,FT2,FT3,FT4,FT5,FT6,PT1,FT7,FT8,FT9,FT10,FT11,FT12,PT2,END];
 
 $("cL3").onclick = ()=>show("hwLevels");
 $("backLv").onclick = ()=>show("dash");
