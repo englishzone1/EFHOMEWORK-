@@ -159,6 +159,17 @@ details[open]>summary{border-radius:12px 12px 0 0}
 .all{background:var(--uc)}
 #ldone .dn{margin:6px 0 20px;background:#fff;border:2px solid var(--uc);border-radius:16px;padding:18px;text-align:center;line-height:1.9}
 .dnb{font-size:2.6rem}
+.exrep{margin-top:12px;background:#f3f8ff;border:1px solid #c9d8ea;border-right:5px solid var(--uc);border-radius:12px;padding:12px 14px;line-height:1.9;text-align:right}
+.gonext{display:block;width:100%;margin-top:8px;background:#fff;border:1.5px solid var(--uc);color:#1d2733;border-radius:10px;padding:9px 12px;font-weight:600;font-size:.92rem}
+.lpn{font-size:.8rem;color:#7a8794;margin-top:4px}
+.rep{margin:0 0 20px;text-align:right}.rep h3{color:var(--blue-d);margin:0 0 10px}
+.rep .panel{line-height:1.9}.rep .panel.good,.rep .panel.bad,.rep .panel.work{border-left:1px solid var(--line);border-right:6px solid var(--okb)}
+.rep .panel.bad{border-right-color:var(--nob)}.rep .panel.work{border-right-color:#f2b705}
+.wk{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}.wkh{font-weight:800;color:var(--blue-d);text-align:right}
+.wke{background:#f8fafc;border-radius:10px;padding:8px 12px;margin:8px 0;line-height:1.8}.wkt{font-weight:700;text-align:right}
+.wke ul{margin:4px 0;padding-right:20px}.how{background:#fff6dd;border-radius:10px;padding:8px 12px;margin-top:6px}
+.lesson .ar{display:block;direction:rtl;text-align:right;font-size:1.05rem;margin:2px 0}
+.cvar{font-size:1.15rem;font-weight:600;margin-top:4px;text-align:right}
 .lesson .badge{float:right;font-style:normal;font-size:.8rem;font-weight:700;background:rgba(255,255,255,.92);color:#1f7040;border-radius:12px;padding:2px 10px;margin-top:-2px}
 </style>
 </head>
@@ -202,13 +213,13 @@ details[open]>summary{border-radius:12px 12px 0 0}
     <button class="lesson exam" id="cT1">Unit 1 Test<span>Grammar, vocabulary and pronunciation – 50 marks</span></button>
     <button class="lesson u2" id="c2A">2A: Are you on holiday?<span>Nationalities, verb be (plural), Pronunciation, Words &amp; Phrases</span></button>
     <button class="lesson u2" id="c2B">2B: What number is the bus?<span>Wh- and How questions, numbers 11–100, understanding numbers</span></button>
-    <button class="lesson rev" id="cREV">Review: Units 1 &amp; 2<span>Grammar, vocabulary, pronunciation, reading and self-check</span></button>
+    <button class="lesson rev" id="cREV" data-ar="مراجعة الوحدتين الأولى والثانية">Review: Units 1 &amp; 2<b class="ar">مراجعة الوحدتين الأولى والثانية</b><span>Grammar, vocabulary, pronunciation, reading and self-check</span></button>
     <button class="lesson u3" id="c3A">3A: Where's my phone?<span>Small things, singular and plural nouns, a / an, plural endings</span></button>
     <button class="lesson u3" id="c3B">3B: Souvenirs<span>this / that / these / those, souvenirs, sentence rhythm</span></button>
     <button class="lesson u3" id="cPE2">Practical English 2: An orange juice, please<span>Understanding prices, buying lunch, useful phrases</span></button>
     <button class="lesson u4" id="c4A">4A: This is my family<span>People and family, possessive adjectives, possessive 's</span></button>
     <button class="lesson u4" id="c4B">4B: The right car for me<span>Colours and adjectives, adjective order, /ɑː/ and /ɔː/</span></button>
-    <button class="lesson rev" id="cREV34">Review: Units 3 &amp; 4<span>Grammar, vocabulary, pronunciation, reading and self-check</span></button>
+    <button class="lesson rev" id="cREV34" data-ar="مراجعة الوحدتين الثالثة والرابعة">Review: Units 3 &amp; 4<b class="ar">مراجعة الوحدتين الثالثة والرابعة</b><span>Grammar, vocabulary, pronunciation, reading and self-check</span></button>
   </section>
   <section id="lvl2" class="hidden">
     <button class="back" id="backL2">⬅ Back to Levels</button>
@@ -998,7 +1009,7 @@ const LESSON_6B = [
 ];
 
 let SECTIONS = LESSON_1A;
-function openLesson(t,s,b){BACKTO=b||`lvl1`;SECTIONS=s;$(`ltitle`).textContent=t;renderCover(t);build();show(`lesson`);updLesson();}
+function openLesson(t,s,b){REPSHOWN=false;BACKTO=b||`lvl1`;SECTIONS=s;$(`ltitle`).textContent=t;renderCover(t);build();show(`lesson`);updLesson();}
 const UCOL={u1:`#1b5faa`,u2:`#e0a800`,u3:`#2e9e5b`,u4:`#7b4bb7`,u5:`#ef6c00`,u6:`#00897b`,rev:`#d64545`};
 let CURCARD=null;
 function renderCover(t){
@@ -1011,21 +1022,70 @@ function renderCover(t){
   const tags={Grammar:`G`,Vocabulary:`V`,Pronunciation:`P`};
   const T={G:[],V:[],P:[]}; SECTIONS.forEach(x=>{ const m=String(x.review||``).match(/^(Grammar|Vocabulary|Pronunciation):\s*(.+)$/); if(m&&!/^review of/i.test(m[2])) T[tags[m[1]]].push(m[2]); }); const tops=[`G`,`V`,`P`].filter(k=>T[k].length).map(k=>`<li><b>${k}</b>${T[k].join(`, `)}</li>`);
   const sub=card&&card.querySelector(`span`)?card.querySelector(`span`).textContent:``;
-  $(`lcover`).innerHTML=`<div class="cv"><div class="cvcode">${code}</div><div class="cvt">${title}</div></div>`+(tops.length?`<ul class="cvtops">${tops.join(``)}</ul>`:(sub?`<p class="cvsub">${sub}</p>`:``));
+  const ar=card&&card.dataset.ar?`<div class="cvar" dir="rtl">${card.dataset.ar}</div>`:``;
+  $(`lcover`).innerHTML=`<div class="cv"><div class="cvcode">${code}</div><div class="cvt">${title}${ar}</div></div>`+(tops.length?`<ul class="cvtops">${tops.join(``)}</ul>`:(sub?`<p class="cvsub">${sub}</p>`:``));
 }
 function doneKey(){ return `ez_done_`+(student&&student.name?student.name.toLowerCase():`guest`); }
 function getDone(){ try{ return JSON.parse(localStorage.getItem(doneKey())||`{}`); }catch(e){ return {}; } }
 function markCards(){ const D=getDone(); document.querySelectorAll(`button.lesson`).forEach(c=>{ const old=c.querySelector(`.badge`); if(old) old.remove(); if(D[c.id]){ const b=document.createElement(`em`); b.className=`badge`; b.textContent=`✓ ${D[c.id].s} / ${D[c.id].t}`; c.appendChild(b); } }); }
+const HOWTO={
+ Grammar:`اقرئي شرح القاعدة بهدوء، ثم اكتبي ثلاث جمل من عندك عليها، وأعيدي التمرين بعد يوم.`,
+ Vocabulary:`اكتبي الكلمات في دفترك مع معناها بالعربية ومثال أو رسم صغير، وراجعيها كل يوم خمس دقائق.`,
+ Pronunciation:`افتحي المقطع الصوتي، واستمعي لكل كلمة ثم كرريها بصوت عالٍ، وسجّلي صوتك وقارنيه بالتسجيل.`,
+ Words:`اقرئي المحادثات بصوت عالٍ، واحفظي العبارات كاملة لا كلمات منفردة، واستعمليها في جمل عن نفسك.`,
+ Other:`أعيدي قراءة التعليمات والمثال قبل الحل، ثم أعيدي التمرين وركّزي على الأسئلة الخاطئة.`};
+function howTo(sec){ const t=(sec.review||sec.name||``)+` `+sec.name; if(/Grammar/i.test(t)) return HOWTO.Grammar; if(/Vocabulary|How You Feel|Time|Prices/i.test(t)) return HOWTO.Vocabulary; if(/Pronunciation|rhythm/i.test(t)) return HOWTO.Pronunciation; if(/Words|Phrases|Lunch|Hotel/i.test(t)) return HOWTO.Words; return HOWTO.Other; }
+function lessonReport(rows){
+  const secs=[]; rows.forEach(r=>{ let g=secs.find(x=>x.s===r.secRef); if(!g){ g={s:r.secRef,n:0,ok:0,ex:[]}; secs.push(g); } g.n++; if(r.isOk) g.ok++; else { let e=g.ex.find(x=>x.ex===r.exRef); if(!e){ e={ex:r.exRef,rows:[]}; g.ex.push(e); } e.rows.push(r); } });
+  const label=g=>{ const rv=String(g.s.review||``); return rv&&!/^(Words and phrases|Useful phrases)$/i.test(rv)?rv:g.s.name; };
+  const strong=secs.filter(g=>g.ok/g.n>=0.8), weak=secs.filter(g=>g.ok/g.n<0.8);
+  let h=`<div class="rep" dir="rtl"><h3>📋 تقرير الدرس</h3>`;
+  h+=`<div class="panel good"><b>✅ نقاط القوة</b><br>`+(strong.length?strong.map(g=>`• <bdi dir="ltr">${label(g)}</bdi> — ${g.ok} من ${g.n}`).join(`<br>`):`لم تظهر نقاط قوة واضحة بعد. استمري في التدريب وستتحسنين! 💪`)+`</div>`;
+  h+=`<div class="panel bad"><b>❌ نقاط الضعف</b><br>`+(weak.length?weak.map(g=>`• <bdi dir="ltr">${label(g)}</bdi> — ${g.ok} من ${g.n}`).join(`<br>`):`لا توجد نقاط ضعف. أحسنتِ! 🌟`)+`</div>`;
+  if(weak.length){
+    h+=`<div class="panel work"><b>📝 ما تحتاجين العمل عليه</b>`;
+    weak.forEach(g=>{
+      h+=`<div class="wk"><div class="wkh"><bdi dir="ltr">${label(g)}</bdi></div>`;
+      g.ex.forEach(e=>{
+        const tips=[...new Set(e.rows.map(r=>r.itRef.ea).filter(Boolean))].slice(0,3);
+        const ans=e.rows.map(r=>{ const f=[...r.querySelectorAll(`input,select`)]; const a=r.itRef.ans||f.map(x=>x.dataset.a.split(`|`)[0]).join(` / `); const qc=r.querySelector(`.q`).cloneNode(true); qc.querySelectorAll(`.n,.chk,select,input,.cor,img,.emo,.ovw`).forEach(x=>x.remove()); let qt=qc.textContent.replace(/\s+/g,` `).trim(); if(qt.length>45) qt=qt.slice(0,45)+`…`; return `<li><bdi dir="ltr">${r.idx}. ${qt?qt+` → `:``}<b>${a}</b></bdi></li>`; }).join(``);
+        h+=`<div class="wke"><div class="wkt"><bdi dir="ltr">${e.ex.t}</bdi></div>`+(e.ex.ea?`<div>📘 القاعدة: ${e.ex.ea}</div>`:``)+(tips.length?`<div>💡 ${tips.join(`<br>💡 `)}</div>`:``)+`<div>الإجابات الصحيحة للأسئلة التي أخطأتِ فيها:</div><ul>${ans}</ul></div>`;
+      });
+      h+=`<div class="how">🎯 طريقة التحسين: ${howTo(g.s)}</div></div>`;
+    });
+    h+=`</div>`;
+  }
+  return h+`</div>`;
+}
+function updExRep(e,rows){
+  const xr=e.exRep; if(!xr) return;
+  const fin=rows.filter(r=>r.isOk||r.locked).length; if(fin<rows.length){ xr.classList.add("hidden"); return; }
+  const ok=rows.filter(r=>r.isOk).length, n=rows.length;
+  let h=`<b>📋 نتيجة التمرين: ${ok} من ${n}</b>`;
+  if(ok===n) h+=`<div>🌟 ممتاز! كل إجاباتك صحيحة. ✅ هذه نقطة قوة عندك.</div>`;
+  else {
+    const tips=[...new Set(rows.filter(r=>!r.isOk).map(r=>r.itRef.ea).filter(Boolean))].slice(0,3);
+    h+=`<div>❌ أخطأتِ في ${n-ok===1?`سؤال واحد`:n-ok===2?`سؤالين`:n-ok<=10?`${n-ok} أسئلة`:`${n-ok} سؤالًا`}. راجعي الإجابات الصحيحة المكتوبة بالأخضر.</div>`;
+    if(e.exRef.ea) h+=`<div>📘 القاعدة: ${e.exRef.ea}</div>`;
+    if(tips.length) h+=`<div>💡 ${tips.join(`<br>💡 `)}</div>`;
+    h+=`<div class="how">🎯 طريقة التحسين: ${howTo(e.secRef)}</div>`;
+  }
+  xr.innerHTML=h; xr.classList.remove("hidden");
+}
+function goRep(){ $(`ldone`).scrollIntoView({behavior:`smooth`}); }
+function goNext(){ const r=[...document.querySelectorAll(`#sections .item`)].find(r=>!r.isX&&!r.isFree&&!r.isOk&&!r.locked); if(!r) return; const d=r.closest(`details`); if(d) d.open=true; r.scrollIntoView({behavior:`smooth`,block:`center`}); const f=r.querySelector(`input,select`); if(f) setTimeout(()=>f.focus({preventScroll:true}),400); }
+let REPSHOWN=false;
 function updLesson(){
   const rows=[...document.querySelectorAll(`#sections .item`)].filter(r=>!r.isX&&!r.isFree);
   const n=rows.length; if(!n){ $(`lprog`).innerHTML=``; $(`ldone`).classList.add(`hidden`); return; }
   const ok=rows.filter(r=>r.isOk).length, fin=rows.filter(r=>r.isOk||r.locked).length;
-  $(`lprog`).innerHTML=`<div class="lp" dir="rtl"><span>التقدّم في الدرس: ${fin} / ${n} · الصحيح: ${ok}</span><div class="bar"><i style="width:${fin/n*100}%"></i></div></div>`;
+  $(`lprog`).innerHTML=`<div class="lp" dir="rtl"><span>التقدّم في الدرس: ${fin} / ${n} · الصحيح: ${ok}</span><div class="bar"><i style="width:${fin/n*100}%"></i></div>${fin<n?`<button class="gonext" onclick="goNext()">بقي ${n-fin} من الأسئلة دون حل، اضغطي للانتقال إلى أول سؤال ⬇</button><div class="lpn">يظهر تقرير الدرس (نقاط القوة والضعف) في آخر الصفحة بعد حل كل الأسئلة.</div>`:`<button class="gonext" onclick="goRep()">✅ أنهيتِ الدرس، اضغطي لعرض التقرير ⬇</button>`}</div>`;
   const dn=$(`ldone`);
   if(fin===n){
     dn.classList.remove(`hidden`);
     const pct=Math.round(ok/n*100), star=pct>=90?`🏆`:pct>=70?`⭐`:`👍`;
-    dn.innerHTML=`<div class="dn" dir="rtl"><div class="dnb">${star}</div><b>أحسنتِ يا ${student&&student.name?student.name:``}! أنهيتِ هذا الدرس.</b><div>درجتك: ${ok} / ${n} (${pct}%)</div>${pct<70?`<div>راجعي الأسئلة الخاطئة ثم أعيدي الدرس.</div>`:``}</div>`;
+    dn.innerHTML=`<div class="dn" dir="rtl"><div class="dnb">${star}</div><b>أحسنتِ يا ${student&&student.name?student.name:``}! أنهيتِ هذا الدرس.</b><div>درجتك: ${ok} / ${n} (${pct}%)</div>${pct<70?`<div>راجعي الأسئلة الخاطئة ثم أعيدي الدرس.</div>`:``}</div>`+lessonReport(rows);
+    if(!REPSHOWN){ REPSHOWN=true; setTimeout(()=>dn.scrollIntoView({behavior:`smooth`,block:`start`}),300); }
     try{ const D=getDone(); if(!D[CURCARD]||D[CURCARD].s<ok){ D[CURCARD]={s:ok,t:n}; localStorage.setItem(doneKey(),JSON.stringify(D)); } }catch(e){}
   } else dn.classList.add(`hidden`);
 }
@@ -1104,7 +1164,7 @@ function build(){
       if(false&&ex.audio&&AUDIO[ex.audio]) e.innerHTML += /^[\w-]{20,}$/.test(AUDIO[ex.audio]) ? `<audio controls preload="none" src="https://drive.google.com/uc?export=download&id=${AUDIO[ex.audio]}" style="width:100%"></audio><p style="margin:0 0 8px;font-size:.85rem"><a href="https://drive.google.com/file/d/${AUDIO[ex.audio]}/view" target="_blank" rel="noopener">Can't hear it? Open the audio in a new tab</a></p>` : `<audio controls preload="none" src="${AUDIO[ex.audio]}" style="width:100%;margin-bottom:8px"></audio>`;
       if(ex.bank) e.innerHTML += `<div class="bank">${(Array.isArray(ex.bank)?ex.bank:bank).map(b=>`<span>${b}</span>`).join("")}</div>`;
       ex.items.forEach((it,i)=>{
-        const row = document.createElement("div"); row.className = "item";
+        const row = document.createElement("div"); row.className = "item"; row.secRef=s; row.exRef=ex; row.itRef=it; row.idx=i+1;
         const q = document.createElement("div"); q.className = "q";
         if(!it.nn) q.insertAdjacentHTML("beforeend",`<span class="n">${i+1}.</span>`);
         it.p.forEach(part=>{
@@ -1125,7 +1185,8 @@ function build(){
       });
       const all = document.createElement("button"); all.className="btn all"; all.textContent="Check all in this exercise";
       all.onclick = ()=>e.querySelectorAll(".item").forEach(r=>r.querySelector(".chk").click());
-      e.appendChild(all); body.appendChild(e); updScore(e);
+      const xr=document.createElement("div"); xr.className="exrep hidden"; xr.dir="rtl"; e.exRep=xr; e.secRef=s; e.exRef=ex;
+      e.append(all,xr); body.appendChild(e); updScore(e);
     });
     d.appendChild(body); root.appendChild(d);
   });
@@ -1142,7 +1203,7 @@ function shortExp(e){
   return r.length>170?r.slice(0,167)+`\u2026`:r;
 }
 function afterBlock(q){ let n=q.lastChild; while(n&&n.nodeType===3&&!n.textContent.trim()) n=n.previousSibling; return !!(n&&n.nodeType===1&&/^(IMG|DIV)$/.test(n.tagName)); }
-function updScore(e){ const rows=[...e.querySelectorAll(".item")].filter(r=>!r.isX&&!r.isFree); const sc=e.querySelector(".score"); if(!sc) return; if(!rows.length){ sc.textContent=""; return; } const n=rows.filter(r=>r.isOk).length; sc.textContent=`✔ ${n} / ${rows.length}`; sc.classList.toggle("full",n===rows.length); updLesson(); }
+function updScore(e){ const rows=[...e.querySelectorAll(".item")].filter(r=>!r.isX&&!r.isFree); const sc=e.querySelector(".score"); if(!sc) return; if(!rows.length){ sc.textContent=""; return; } const n=rows.filter(r=>r.isOk).length; sc.textContent=`✔ ${n} / ${rows.length}`; sc.classList.toggle("full",n===rows.length); updExRep(e,rows); updLesson(); }
 function hintFor(f){ const a=f.dataset.a.split("|")[0]; if(f.tagName==="SELECT") return ``; const w=a.trim().split(/\s+/); if(w.length>=3) return `الإجابة ${w.length} كلمات وتبدأ بـ «${w[0]}».`; const k=Math.min(3,Math.max(1,Math.ceil(a.length/3))); const L=a.replace(/\s/g,``).length; return a.length<=1?``:`تبدأ بـ «${a.slice(0,k)}…» (${L==2?`حرفان`:L<=10?L+` حروف`:L+` حرفًا`}).`; }
 function check(row,it,review,ex){
   if(it.x || row.locked) return;
